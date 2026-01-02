@@ -798,11 +798,16 @@
             
             if (dot) {
                 const index = parseInt(dot.dataset.index);
-                if (!heartPattern.includes(index) && index === heartPattern[heartPattern.length - 1] + 1) {
-                    heartPattern.push(index);
-                    updateHeartDots();
-                    updateHeartPath();
-                    playTone(400 + index * 50, 0.1);
+                const lastIndex = heartPattern[heartPattern.length - 1];
+                
+                if (!heartPattern.includes(index)) {
+                    const distance = Math.abs(index - lastIndex);
+                    if (distance === 1 || distance === 11) {
+                        heartPattern.push(index);
+                        updateHeartDots();
+                        updateHeartPath();
+                        playTone(400 + heartPattern.length * 50, 0.1);
+                    }
                 }
             }
         }
