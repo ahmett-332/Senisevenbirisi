@@ -1,113 +1,865 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>günaydınnnn</title>
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: monospace;
-  }
-  #msg {
-    opacity: 0;
-    margin-top: 20px;
-    text-align: center;
-    transition: opacity 0.6s ease;
-  }
-  #piece {
-    cursor: grab;
-    transition: transform 0.1s;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #ec4899 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .stage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
+        .stage.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #stage1 {
+            text-align: center;
+        }
+
+        .sleep-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 40px;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
+        }
+
+        .sleep-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .glow-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+            animation: breathe 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
+        }
+
+        .hint {
+            color: rgba(255,255,255,0.9);
+            font-size: 15px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            font-weight: 300;
+        }
+
+        .hint.pulsing {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        #stage2 {
+            text-align: center;
+        }
+
+        .sunrise-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin: 0 auto 40px;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 50%, #2a2f4a 100%);
+            border-radius: 20px;
+            transition: background 1s ease;
+        }
+
+        .sunrise-container.daylight {
+            background: linear-gradient(to bottom, #87ceeb 0%, #ffa07a 50%, #ffb6c1 100%);
+        }
+
+        .horizon {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .sun {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle at 30% 30%, #fff59d, #ffd700 40%, #ff8c00);
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 0 50px rgba(255,215,0,0.7), 0 0 100px rgba(255,215,0,0.3);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .sun::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 30%;
+            height: 30%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8), transparent);
+            border-radius: 50%;
+        }
+
+        .sun:active {
+            cursor: grabbing;
+        }
+
+        .sun.rising {
+            box-shadow: 0 0 80px rgba(255,215,0,1), 0 0 150px rgba(255,215,0,0.5);
+        }
+
+        .sky-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(255,200,100,0.3) 0%, rgba(255,150,100,0.2) 50%, rgba(255,200,150,0.1) 100%);
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .sky-gradient.visible {
+            opacity: 1;
+        }
+
+        .moon {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, #fff, #e0e0e0);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255,255,255,0.5);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .moon.hidden {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+
+        .stars-night {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            transition: opacity 1s ease;
+        }
+
+        .stars-night.hidden {
+            opacity: 0;
+        }
+
+        .star-small {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 3px rgba(255,255,255,0.8);
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .clouds {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .clouds.visible {
+            opacity: 0.6;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255,255,255,0.8);
+            border-radius: 100px;
+            animation: floatCloud 20s linear infinite;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: rgba(255,255,255,0.8);
+            border-radius: 100px;
+        }
+
+        @keyframes floatCloud {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(calc(100% + 500px)); }
+        }
+
+        #stage3 {
+            text-align: center;
+        }
+
+        .layers-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin-bottom: 30px;
+            touch-action: pan-y;
+        }
+
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 2px solid rgba(255,255,255,0.25);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .layer:active {
+            cursor: grabbing;
+        }
+
+        .layer-text {
+            font-size: 26px;
+            color: #fff;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        #stage4 {
+            text-align: center;
+        }
+
+        .final-message {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 32px;
+            padding: 70px 50px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+
+        .final-message::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .reveal-text {
+            font-size: 52px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 4px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s ease;
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 28px;
+            animation: floatHeart 2s ease-in-out infinite;
+            opacity: 0;
+            filter: drop-shadow(0 2px 8px rgba(255,0,0,0.3));
+        }
+
+        .heart:nth-child(1) {
+            top: -10px;
+            left: -30px;
+            animation-delay: 0s;
+        }
+
+        .heart:nth-child(2) {
+            top: -10px;
+            right: -30px;
+            animation-delay: 0.5s;
+        }
+
+        .heart:nth-child(3) {
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 1s;
+        }
+
+        .heart:nth-child(4) {
+            top: 50%;
+            left: -40px;
+            animation-delay: 1.5s;
+        }
+
+        .heart:nth-child(5) {
+            top: 50%;
+            right: -40px;
+            animation-delay: 0.3s;
+        }
+
+        .heart:nth-child(6) {
+            top: 20px;
+            left: 10%;
+            animation-delay: 0.7s;
+        }
+
+        .heart:nth-child(7) {
+            top: 20px;
+            right: 10%;
+            animation-delay: 1.2s;
+        }
+
+        .heart:nth-child(8) {
+            bottom: 20px;
+            left: 20%;
+            animation-delay: 0.9s;
+        }
+
+        @keyframes floatHeart {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(0.8) rotate(-10deg); }
+            25% { opacity: 0.8; transform: translateY(-8px) scale(1) rotate(5deg); }
+            50% { opacity: 1; transform: translateY(-18px) scale(1.15) rotate(10deg); }
+            75% { opacity: 0.8; transform: translateY(-8px) scale(1) rotate(-5deg); }
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 300;
+            letter-spacing: 2px;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+            box-shadow: 0 0 2px rgba(255,255,255,0.8);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(10px); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            .sunrise-container {
+                height: 250px;
+            }
+            .sun {
+                width: 70px;
+                height: 70px;
+            }
+            .sleep-icon {
+                width: 80px;
+                height: 80px;
+            }
+            .reveal-text {
+                font-size: 38px;
+                letter-spacing: 2px;
+            }
+            .heart {
+                font-size: 20px;
+            }
+            .sunrise-container {
+                height: 220px;
+            }
+            .final-message {
+                padding: 40px 30px;
+                min-height: 220px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="stage active" id="stage1">
+            <div class="sleep-icon" id="sleepIcon">
+                <div class="glow-circle"></div>
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="35" fill="rgba(255,255,255,0.25)" stroke="white" stroke-width="2.5"/>
+                    <path d="M35 45 Q35 40, 40 40 Q45 40, 45 45" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <path d="M55 45 Q55 40, 60 40 Q65 40, 65 45" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <path d="M35 62 Q50 68, 65 62" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <text x="75" y="30" fill="white" font-size="16" opacity="0.7">z</text>
+                    <text x="82" y="22" fill="white" font-size="20" opacity="0.5">z</text>
+                    <text x="88" y="12" fill="white" font-size="24" opacity="0.3">z</text>
+                </svg>
+            </div>
+            <div class="hint pulsing" id="hint1">basılı tut ve bekle</div>
+        </div>
 
-<svg id="svg" width="320" height="260" viewBox="0 0 300 260"
-     xmlns="http://www.w3.org/2000/svg">
-  <!-- Eksik kalp -->
-  <path id="heart" d="M150 230
-           C-40 120 60 -40 150 60"
-        fill="none" stroke="#ff4d6d" stroke-width="5"/>
+        <div class="stage" id="stage2">
+            <div class="sunrise-container" id="sunriseContainer">
+                <div class="stars-night" id="starsNight"></div>
+                <div class="moon" id="moon"></div>
+                <div class="clouds" id="clouds"></div>
+                <div class="sky-gradient" id="skyGradient"></div>
+                <div class="horizon"></div>
+                <div class="sun" id="sun"></div>
+            </div>
+            <div class="hint">güneşi yukarı çek ve günü başlat</div>
+        </div>
 
-  <!-- Sürüklenen parça -->
-  <circle id="piece" cx="260" cy="40" r="10" fill="#ff4d6d"/>
-</svg>
+        <div class="stage" id="stage3">
+            <div class="layers-container" id="layersContainer">
+                <div class="layer" data-layer="2" style="transform: translate(10px, 20px);">
+                    <div class="layer-text">her sabah</div>
+                </div>
+                <div class="layer" data-layer="1" style="transform: translate(5px, 10px);">
+                    <div class="layer-text">senin için</div>
+                </div>
+                <div class="layer" data-layer="0">
+                    <div class="layer-text">sadece bugün değil</div>
+                </div>
+            </div>
+            <div class="hint">katmanları herhangi yöne kaydır</div>
+        </div>
 
-<div id="msg">
-  <div style="color:#ff4d6d;">loading… %100</div>
-  <div style="color:#333;margin-top:6px;">günaydınnnn</div>
-</div>
+        <div class="stage" id="stage4">
+            <div class="final-message">
+                <div class="reveal-text">
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    Günaydınnnn Ayşe
+                </div>
+                <div class="subtitle">sana özel</div>
+            </div>
+        </div>
+    </div>
 
-<script>
-const piece = document.getElementById("piece");
-const heart = document.getElementById("heart");
-const msg = document.getElementById("msg");
-const svg = document.getElementById("svg");
+    <script>
+        let currentStage = 1;
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioUnlocked = false;
 
-let dragging = false;
-let solved = false;
+        function playTone(frequency, duration, type = 'sine') {
+            if (!audioUnlocked) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = type;
+            oscillator.frequency.value = frequency;
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
 
-const target = { x: 150, y: 110 };
-const snapRadius = 35;
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            const oscillator = audioContext.createOscillator();
+            oscillator.connect(audioContext.destination);
+            oscillator.start(0);
+            oscillator.stop(0);
+            audioUnlocked = true;
+        }
+        
+        for (let i = 0; i < 60; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            document.getElementById('stars').appendChild(star);
+        }
 
-piece.addEventListener("mousedown", () => dragging = true);
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = (3 + Math.random() * 3) + 's';
+            document.getElementById('stars').appendChild(particle);
+        }
 
-document.addEventListener("mouseup", () => {
-  if (!dragging || solved) return;
-  dragging = false;
+        const starsNight = document.getElementById('starsNight');
+        for (let i = 0; i < 30; i++) {
+            const star = document.createElement('div');
+            star.className = 'star-small';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 70 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsNight.appendChild(star);
+        }
 
-  // Yanlış bırakma → geri itme
-  piece.setAttribute("cx", 260);
-  piece.setAttribute("cy", 40);
-  piece.style.transform = "scale(0.9)";
-  setTimeout(() => piece.style.transform = "scale(1)", 120);
-});
+        const clouds = document.getElementById('clouds');
+        const cloudConfigs = [
+            { width: 80, height: 30, top: 20, delay: 0 },
+            { width: 100, height: 35, top: 50, delay: 5 },
+            { width: 70, height: 25, top: 35, delay: 10 }
+        ];
+        
+        cloudConfigs.forEach(config => {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            cloud.style.width = config.width + 'px';
+            cloud.style.height = config.height + 'px';
+            cloud.style.top = config.top + '%';
+            cloud.style.left = '-100px';
+            cloud.style.animationDelay = config.delay + 's';
+            clouds.appendChild(cloud);
+        });
 
-document.addEventListener("mousemove", (e) => {
-  if (!dragging || solved) return;
+        const sleepIcon = document.getElementById('sleepIcon');
+        const hint1 = document.getElementById('hint1');
+        let holdTimer;
+        let holdProgress = 0;
 
-  const rect = svg.getBoundingClientRect();
-  let x = e.clientX - rect.left;
-  let y = e.clientY - rect.top;
+        sleepIcon.addEventListener('touchstart', (e) => { unlockAudio(); startHold(e); });
+        sleepIcon.addEventListener('mousedown', (e) => { unlockAudio(); startHold(e); });
+        sleepIcon.addEventListener('touchend', endHold);
+        sleepIcon.addEventListener('mouseup', endHold);
+        sleepIcon.addEventListener('mouseleave', endHold);
 
-  const dx = target.x - x;
-  const dy = target.y - y;
-  const dist = Math.sqrt(dx * dx + dy * dy);
+        function startHold(e) {
+            e.preventDefault();
+            playTone(200, 0.05);
+            holdTimer = setInterval(() => {
+                holdProgress += 2;
+                sleepIcon.style.transform = `scale(${1 + holdProgress / 100})`;
+                sleepIcon.style.opacity = 1 - holdProgress / 100;
+                hint1.textContent = '...';
+                hint1.classList.remove('pulsing');
+                
+                if (holdProgress % 10 === 0) {
+                    playTone(200 + holdProgress * 3, 0.05);
+                }
+                
+                if (holdProgress >= 100) {
+                    endHold();
+                    playTone(600, 0.3, 'triangle');
+                    moveToStage(2);
+                }
+            }, 20);
+        }
 
-  // Manyetik çekim
-  if (dist < snapRadius) {
-    x += dx * 0.15;
-    y += dy * 0.15;
-  }
+        function endHold() {
+            clearInterval(holdTimer);
+            if (holdProgress < 100) {
+                sleepIcon.style.transform = 'scale(1)';
+                sleepIcon.style.opacity = '1';
+                hint1.textContent = 'basılı tut ve bekle';
+                hint1.classList.add('pulsing');
+                holdProgress = 0;
+            }
+        }
 
-  piece.setAttribute("cx", x);
-  piece.setAttribute("cy", y);
+        const sun = document.getElementById('sun');
+        const skyGradient = document.getElementById('skyGradient');
+        const sunriseContainer = document.getElementById('sunriseContainer');
+        const moon = document.getElementById('moon');
+        const starsNightEl = document.getElementById('starsNight');
+        const cloudsEl = document.getElementById('clouds');
+        let sunDragging = false;
+        let sunStartY = 0;
+        let sunCurrentY = 0;
+        let sunProgress = 0;
 
-  // Doğru yer → kilit açılır
-  if (dist < 10) {
-    solved = true;
-    heart.setAttribute(
-      "d",
-      "M150 230 C-40 120 60 -40 150 60 C240 -40 340 120 150 230"
-    );
-    piece.style.display = "none";
+        sun.addEventListener('touchstart', startSunDrag);
+        sun.addEventListener('mousedown', startSunDrag);
+        document.addEventListener('touchmove', dragSun);
+        document.addEventListener('mousemove', dragSun);
+        document.addEventListener('touchend', endSunDrag);
+        document.addEventListener('mouseup', endSunDrag);
 
-    // Mikro titreşim
-    svg.style.transform = "translateX(-2px)";
-    setTimeout(() => svg.style.transform = "translateX(2px)", 60);
-    setTimeout(() => svg.style.transform = "translateX(0)", 120);
+        function startSunDrag(e) {
+            if (currentStage !== 2) return;
+            e.preventDefault();
+            sunDragging = true;
+            sunStartY = e.touches ? e.touches[0].clientY : e.clientY;
+            sunCurrentY = sunStartY;
+            sun.classList.add('rising');
+            playTone(300, 0.1);
+        }
 
-    msg.style.opacity = 1;
-    dragging = false;
-  }
-});
-</script>
+        function dragSun(e) {
+            if (!sunDragging || currentStage !== 2) return;
+            e.preventDefault();
+            sunCurrentY = e.touches ? e.touches[0].clientY : e.clientY;
+            const diff = sunStartY - sunCurrentY;
+            
+            if (diff > 0) {
+                const prevProgress = sunProgress;
+                sunProgress = Math.min(diff / 200, 1);
+                sun.style.bottom = (20 + diff) + 'px';
+                sun.style.transform = `translateX(-50%) scale(${1 + sunProgress * 0.3})`;
+                skyGradient.style.opacity = sunProgress;
+                
+                if (sunProgress > 0.3) {
+                    sunriseContainer.classList.add('daylight');
+                    moon.classList.add('hidden');
+                    starsNightEl.classList.add('hidden');
+                    cloudsEl.classList.add('visible');
+                }
+                
+                if (Math.floor(sunProgress * 10) > Math.floor(prevProgress * 10)) {
+                    playTone(400 + sunProgress * 400, 0.05);
+                }
+            }
+        }
 
+        function endSunDrag() {
+            if (!sunDragging) return;
+            sunDragging = false;
+            sun.classList.remove('rising');
+            
+            if (sunProgress >= 0.9) {
+                sun.style.bottom = '250px';
+                sun.style.transform = 'translateX(-50%) scale(1.3)';
+                skyGradient.style.opacity = '1';
+                sunriseContainer.classList.add('daylight');
+                moon.classList.add('hidden');
+                starsNightEl.classList.add('hidden');
+                cloudsEl.classList.add('visible');
+                playTone(800, 0.5, 'triangle');
+                setTimeout(() => moveToStage(3), 800);
+            } else {
+                sun.style.bottom = '20px';
+                sun.style.transform = 'translateX(-50%) scale(1)';
+                skyGradient.style.opacity = '0';
+                sunriseContainer.classList.remove('daylight');
+                moon.classList.remove('hidden');
+                starsNightEl.classList.remove('hidden');
+                cloudsEl.classList.remove('visible');
+                sunProgress = 0;
+                playTone(200, 0.1);
+            }
+        }
+
+        const layersContainer = document.getElementById('layersContainer');
+        const layers = Array.from(document.querySelectorAll('.layer'));
+        let layersRemoved = 0;
+        let draggedLayer = null;
+        let startX = 0;
+        let startY = 0;
+        let currentX = 0;
+        let currentY = 0;
+
+        layers.forEach(layer => {
+            layer.addEventListener('touchstart', startDrag);
+            layer.addEventListener('mousedown', startDrag);
+        });
+
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchend', endDrag);
+        document.addEventListener('mouseup', endDrag);
+
+        function startDrag(e) {
+            if (currentStage !== 3) return;
+            draggedLayer = e.currentTarget;
+            const touch = e.touches ? e.touches[0] : e;
+            startX = touch.clientX;
+            startY = touch.clientY;
+            currentX = startX;
+            currentY = startY;
+            playTone(350, 0.08);
+        }
+
+        function drag(e) {
+            if (!draggedLayer || currentStage !== 3) return;
+            e.preventDefault();
+            const touch = e.touches ? e.touches[0] : e;
+            currentX = touch.clientX;
+            currentY = touch.clientY;
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
+            
+            draggedLayer.style.transform = `translate(${diffX}px, ${diffY}px)`;
+            const distance = Math.sqrt(diffX * diffX + diffY * diffY);
+            draggedLayer.style.opacity = Math.max(0, 1 - distance / 200);
+        }
+
+        function endDrag() {
+            if (!draggedLayer) return;
+            
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
+            const distance = Math.sqrt(diffX * diffX + diffY * diffY);
+            
+            if (distance > 120) {
+                const angle = Math.atan2(diffY, diffX);
+                const finalX = Math.cos(angle) * 500;
+                const finalY = Math.sin(angle) * 500;
+                draggedLayer.style.transform = `translate(${finalX}px, ${finalY}px)`;
+                draggedLayer.style.opacity = '0';
+                playTone(500 + layersRemoved * 200, 0.2, 'sine');
+                layersRemoved++;
+                
+                setTimeout(() => {
+                    if (layersRemoved === 3) {
+                        playTone(880, 0.8, 'triangle');
+                        setTimeout(() => playTone(660, 0.3), 200);
+                        setTimeout(() => playTone(880, 0.5), 400);
+                        moveToStage(4);
+                    }
+                }, 300);
+            } else {
+                const layerIndex = parseInt(draggedLayer.dataset.layer);
+                draggedLayer.style.transform = `translate(${layerIndex * 5}px, ${layerIndex * 10}px)`;
+                draggedLayer.style.opacity = '1';
+                playTone(250, 0.08);
+            }
+            
+            draggedLayer = null;
+        }
+
+        function moveToStage(stage) {
+            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+            document.getElementById(`stage${stage}`).classList.add('active');
+            currentStage = stage;
+        }
+    </script>
 </body>
 </html>
