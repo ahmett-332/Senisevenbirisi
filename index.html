@@ -278,16 +278,29 @@
         }
 
         .heart-dot.active {
-            background: #ff6b9d !important;
-            border-color: #ff6b9d !important;
-            box-shadow: 0 0 15px rgba(255,107,157,0.8) !important;
-            transform: scale(1.3);
+            background: #ff1a75 !important;
+            border-color: #ff1a75 !important;
+            box-shadow: 0 0 20px rgba(255,26,117,1) !important;
+            transform: scale(1.4);
         }
 
         .heart-dot.completed {
             background: #ff1744 !important;
             border-color: #ff1744 !important;
-            box-shadow: 0 0 20px rgba(255,23,68,0.9) !important;
+            box-shadow: 0 0 25px rgba(255,23,68,1) !important;
+            transform: scale(1.2);
+        }
+
+        .heart-dot.next-available {
+            background: rgba(255,182,193,0.8) !important;
+            border-color: rgba(255,182,193,1) !important;
+            box-shadow: 0 0 10px rgba(255,182,193,0.6) !important;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.85; }
         }
 
         .heart-path {
@@ -309,15 +322,16 @@
         }
 
         @keyframes heartbeat {
-            0%, 100% { transform: translate(90px, 60px) scale(8.5); }
-            10% { transform: translate(90px, 60px) scale(9.2); }
-            20% { transform: translate(90px, 60px) scale(8.5); }
-            30% { transform: translate(90px, 60px) scale(9.0); }
-            40% { transform: translate(90px, 60px) scale(8.5); }
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.08); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.05); }
+            40% { transform: scale(1); }
         }
 
         .heart-fill-path.beating {
             animation: heartbeat 1.2s ease-in-out 3;
+            transform-origin: center;
         }
 
 
@@ -636,9 +650,9 @@
             <div class="heart-container">
                 <div class="heart-canvas" id="heartCanvas">
                     <div class="heart-path">
-                        <svg viewBox="0 0 300 300">
-                            <path id="heartPath" stroke="#ff6b9d" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
-                            <path id="heartFill" fill="#ff1744" opacity="0" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" transform="translate(90, 60) scale(8.5)" class="heart-fill-path"/>
+                        <svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
+                            <path id="heartPath" stroke="#ff1a75" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="1" vector-effect="non-scaling-stroke"/>
+                            <path id="heartFill" fill="#ff1744" opacity="0" d="M150,270 C90,220 30,170 30,110 C30,60 70,30 110,30 C130,30 145,40 150,55 C155,40 170,30 190,30 C230,30 270,60 270,110 C270,170 210,220 150,270 Z" class="heart-fill-path"/>
                         </svg>
                     </div>
                     <div id="heartDots"></div>
@@ -797,17 +811,69 @@
             dot.dataset.index = index;
             heartDots.appendChild(dot);
 
-            dot.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                startHeartPattern(e, index);
-            }, { passive: false });
-            dot.addEventListener('mousedown', (e) => startHeartPattern(e, index));
+            if (isMobile) {
+                dot.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleDotTap(index);
+                }, { passive: false });
+            } else {
+                dot.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    startHeartPattern(e, index);
+                }, { passive: false });
+                dot.addEventListener('mousedown', (e) => startHeartPattern(e, index));
+            }
         });
 
-        document.addEventListener('touchmove', continueHeartPattern);
-        document.addEventListener('mousemove', continueHeartPattern);
-        document.addEventListener('touchend', endHeartPattern);
-        document.addEventListener('mouseup', endHeartPattern);
+        if (!isMobile) {
+            document.addEventListener('touchmove', continueHeartPattern);
+            document.addEventListener('mousemove', continueHeartPattern);
+            document.addEventListener('touchend', endHeartPattern);
+            document.addEventListener('mouseup', endHeartPattern);
+        }
+
+        function handleDotTap(index) {
+            if (currentStage !== 2) return;
+            
+            if (heartPattern.length === 0) {
+                heartPattern = [index];
+                updateHeartDots();
+                updateNextAvailableDots();
+                playTone(520, 0.06);
+            } else if (!heartPattern.includes(index)) {
+                const lastIndex = heartPattern[heartPattern.length - 1];
+                const distance = Math.abs(index - lastIndex);
+                
+                if (distance === 1 || distance === 11) {
+                    heartPattern.push(index);
+                    updateHeartDots();
+                    updateHeartPath();
+                    updateNextAvailableDots();
+                    playTone(520 + heartPattern.length * 40, 0.08);
+                    
+                    if (heartPattern.length === heartDotPositions.length) {
+                        completeHeart();
+                    }
+                }
+            }
+        }
+
+        function updateNextAvailableDots() {
+            if (heartPattern.length === 0 || heartPattern.length === heartDotPositions.length) {
+                document.querySelectorAll('.heart-dot').forEach(dot => {
+                    dot.classList.remove('next-available');
+                });
+                return;
+            }
+            
+            const lastIndex = heartPattern[heartPattern.length - 1];
+            document.querySelectorAll('.heart-dot').forEach((dot, i) => {
+                const distance = Math.abs(i - lastIndex);
+                const isAvailable = !heartPattern.includes(i) && (distance === 1 || distance === 11);
+                dot.classList.toggle('next-available', isAvailable);
+            });
+        }
 
         function startHeartPattern(e, index) {
             if (currentStage !== 2) return;
@@ -843,6 +909,28 @@
             }
         }
 
+        function completeHeart() {
+            document.querySelectorAll('.heart-dot').forEach(dot => {
+                dot.classList.remove('active', 'next-available');
+                dot.classList.add('completed');
+            });
+            
+            setTimeout(() => {
+                document.querySelectorAll('.heart-dot').forEach(dot => {
+                    dot.style.opacity = '0';
+                    dot.style.transform = 'scale(0)';
+                });
+                heartPath.setAttribute('opacity', '0');
+                heartFill.setAttribute('opacity', '1');
+                heartFill.classList.add('beating');
+                playTone(660, 0.4, 'sine');
+                setTimeout(() => playTone(880, 0.3, 'sine'), 150);
+                setTimeout(() => playTone(1047, 0.5, 'sine'), 300);
+            }, 400);
+            
+            setTimeout(() => moveToStage(3), 2000);
+        }
+
         function endHeartPattern() {
             if (!heartDrawing) return;
             heartDrawing = false;
@@ -850,25 +938,7 @@
             const allConnected = isHeartComplete();
             
             if (allConnected && heartPattern.length === heartDotPositions.length) {
-                document.querySelectorAll('.heart-dot').forEach(dot => {
-                    dot.classList.remove('active');
-                    dot.classList.add('completed');
-                });
-                
-                setTimeout(() => {
-                    document.querySelectorAll('.heart-dot').forEach(dot => {
-                        dot.style.opacity = '0';
-                        dot.style.transform = 'scale(0)';
-                    });
-                    heartPath.setAttribute('opacity', '0');
-                    heartFill.setAttribute('opacity', '1');
-                    heartFill.classList.add('beating');
-                    playTone(660, 0.4, 'sine');
-                    setTimeout(() => playTone(880, 0.3, 'sine'), 150);
-                    setTimeout(() => playTone(1047, 0.5, 'sine'), 300);
-                }, 300);
-                
-                setTimeout(() => moveToStage(3), 1500);
+                completeHeart();
             } else {
                 setTimeout(() => {
                     heartPattern = [];
@@ -902,19 +972,28 @@
         }
 
         function updateHeartPath() {
-            if (heartPattern.length < 2) {
+            if (heartPattern.length < 1) {
                 heartPath.setAttribute('d', '');
                 return;
             }
             
-            const pathData = heartPattern.map((index, i) => {
+            let pathCommands = [];
+            heartPattern.forEach((index, i) => {
                 const pos = heartDotPositions[index];
                 const x = pos.x * 3;
                 const y = pos.y * 3;
-                return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
-            }).join(' ');
+                if (i === 0) {
+                    pathCommands.push(`M ${x} ${y}`);
+                } else {
+                    pathCommands.push(`L ${x} ${y}`);
+                }
+            });
             
-            heartPath.setAttribute('d', pathData);
+            if (heartPattern.length === heartDotPositions.length) {
+                pathCommands.push('Z');
+            }
+            
+            heartPath.setAttribute('d', pathCommands.join(' '));
         }
 
         const sun = document.getElementById('sun');
