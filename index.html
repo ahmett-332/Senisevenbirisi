@@ -236,6 +236,26 @@
             font-weight: 300;
         }
 
+        .congratulations {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            color: #ff1744 !important;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 15px rgba(255,23,68,0.6);
+            opacity: 0;
+            transition: all 0.5s ease;
+            pointer-events: none;
+        }
+
+        .congratulations.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
         #stage2 {
             text-align: center;
         }
@@ -659,18 +679,19 @@
                 </div>
             </div>
             <div class="hint">noktaları sırayla birleştir ve kalbi tamamla</div>
+            <div class="congratulations" id="heartCongrats">tebrikler kalbimi tamamladın ❤️</div>
         </div>
 
         <div class="stage" id="stage3">
             <div class="layers-container" id="layersContainer">
                 <div class="layer" data-layer="2" style="transform: translate(10px, 20px);">
-                    <div class="layer-text">her sabah</div>
+                    <div class="layer-text">Sabahın en tatlı kısmı</div>
                 </div>
                 <div class="layer" data-layer="1" style="transform: translate(5px, 10px);">
-                    <div class="layer-text">senin için</div>
+                    <div class="layer-text">Seninle başlıyor</div>
                 </div>
                 <div class="layer" data-layer="0">
-                    <div class="layer-text">sadece bugün değil</div>
+                    <div class="layer-text">Kalbim sende</div>
                 </div>
             </div>
             <div class="hint">katmanları herhangi yöne kaydır</div>
@@ -928,7 +949,11 @@
                 setTimeout(() => playTone(1047, 0.5, 'sine'), 300);
             }, 400);
             
-            setTimeout(() => moveToStage(3), 2000);
+            setTimeout(() => {
+                document.getElementById('heartCongrats').classList.add('show');
+            }, 800);
+            
+            setTimeout(() => moveToStage(3), 2500);
         }
 
         function endHeartPattern() {
