@@ -68,7 +68,7 @@
         .sunrise-container {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 400px;
             margin: 0 auto 40px;
             overflow: hidden;
             background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 50%, #2a2f4a 100%);
@@ -236,8 +236,8 @@
 
         .heart-container {
             position: relative;
-            width: 280px;
-            height: 300px;
+            width: 340px;
+            height: 360px;
             margin: 0 auto 40px;
         }
 
@@ -246,16 +246,16 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 240px;
-            height: 240px;
+            width: 300px;
+            height: 300px;
         }
 
         .heart-dot {
             position: absolute;
-            width: 18px;
-            height: 18px;
-            background: rgba(255,255,255,0.6) !important;
-            border: 2px solid rgba(255,255,255,0.9) !important;
+            width: 22px;
+            height: 22px;
+            background: rgba(255,255,255,0.7) !important;
+            border: 3px solid rgba(255,255,255,0.95) !important;
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -295,27 +295,6 @@
             height: 100%;
         }
 
-        .completed-heart {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 120px;
-            height: 120px;
-            opacity: 0;
-            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .completed-heart.show {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
-        .completed-heart svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 0 20px rgba(255,23,68,0.6));
-        }
 
         #stage3 {
             text-align: center;
@@ -580,23 +559,23 @@
                 margin-top: 12px;
             }
             .sunrise-container {
-                height: 220px;
+                height: 280px;
             }
             .sun {
                 width: 70px;
                 height: 70px;
             }
             .heart-container {
-                width: 240px;
-                height: 260px;
+                width: 280px;
+                height: 300px;
             }
             .heart-canvas {
-                width: 200px;
-                height: 200px;
+                width: 250px;
+                height: 250px;
             }
             .heart-dot {
-                width: 16px;
-                height: 16px;
+                width: 20px;
+                height: 20px;
             }
             .final-message {
                 padding: 40px 25px;
@@ -629,15 +608,11 @@
                 <div class="heart-canvas" id="heartCanvas">
                     <div class="heart-path">
                         <svg>
-                            <path id="heartPath" stroke="rgba(255,107,157,0.6)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path id="heartPath" stroke="#ff6b9d" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+                            <path id="heartFill" fill="#ff1744" opacity="0" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" transform="translate(90, 60) scale(8.5)"/>
                         </svg>
                     </div>
                     <div id="heartDots"></div>
-                </div>
-                <div class="completed-heart" id="completedHeart">
-                    <svg viewBox="0 0 24 24" fill="#ff1744">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    </svg>
                 </div>
             </div>
             <div class="hint">noktaları sırayla birleştir ve kalbi tamamla</div>
@@ -780,15 +755,15 @@
 
         const heartDots = document.getElementById('heartDots');
         const heartPath = document.getElementById('heartPath');
-        const completedHeart = document.getElementById('completedHeart');
+        const heartFill = document.getElementById('heartFill');
         let heartPattern = [];
         let heartDrawing = false;
 
         heartDotPositions.forEach((pos, index) => {
             const dot = document.createElement('div');
             dot.className = 'heart-dot';
-            dot.style.left = `calc(${pos.x}% - 9px)`;
-            dot.style.top = `calc(${pos.y}% - 9px)`;
+            dot.style.left = `calc(${pos.x}% - 11px)`;
+            dot.style.top = `calc(${pos.y}% - 11px)`;
             dot.dataset.index = index;
             heartDots.appendChild(dot);
 
@@ -839,7 +814,9 @@
             if (!heartDrawing) return;
             heartDrawing = false;
             
-            if (heartPattern.length === heartDotPositions.length) {
+            const allConnected = isHeartComplete();
+            
+            if (allConnected && heartPattern.length === heartDotPositions.length) {
                 document.querySelectorAll('.heart-dot').forEach(dot => {
                     dot.classList.remove('active');
                     dot.classList.add('completed');
@@ -848,15 +825,16 @@
                 setTimeout(() => {
                     document.querySelectorAll('.heart-dot').forEach(dot => {
                         dot.style.opacity = '0';
+                        dot.style.transform = 'scale(0)';
                     });
-                    heartPath.setAttribute('d', '');
-                    completedHeart.classList.add('show');
+                    heartPath.setAttribute('opacity', '0');
+                    heartFill.setAttribute('opacity', '1');
                     playTone(880, 0.8, 'triangle');
-                    setTimeout(() => playTone(660, 0.3), 200);
-                    setTimeout(() => playTone(880, 0.5), 400);
-                }, 500);
+                    setTimeout(() => playTone(660, 0.3), 100);
+                    setTimeout(() => playTone(880, 0.5), 200);
+                }, 300);
                 
-                setTimeout(() => moveToStage(3), 2000);
+                setTimeout(() => moveToStage(3), 1500);
             } else {
                 setTimeout(() => {
                     heartPattern = [];
@@ -864,6 +842,23 @@
                     heartPath.setAttribute('d', '');
                 }, 500);
             }
+        }
+
+        function isHeartComplete() {
+            if (heartPattern.length !== heartDotPositions.length) return false;
+            
+            const connected = new Set();
+            for (let i = 0; i < heartPattern.length - 1; i++) {
+                const current = heartPattern[i];
+                const next = heartPattern[i + 1];
+                const distance = Math.abs(next - current);
+                if (distance === 1 || distance === 11) {
+                    connected.add(current);
+                    connected.add(next);
+                }
+            }
+            
+            return connected.size === heartDotPositions.length;
         }
 
         function updateHeartDots() {
@@ -880,8 +875,8 @@
             
             const pathData = heartPattern.map((index, i) => {
                 const pos = heartDotPositions[index];
-                const x = pos.x * 2.4;
-                const y = pos.y * 2.4;
+                const x = pos.x * 3;
+                const y = pos.y * 3;
                 return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
             }).join(' ');
             
@@ -1057,3 +1052,4 @@
     </script>
 </body>
 </html>
+
