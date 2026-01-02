@@ -77,11 +77,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
-            animation: breathe 3s ease-in-out infinite;
+            background: radial-gradient(circle, rgba(255,255,255,0.15), transparent);
+            animation: breathe 2.5s ease-in-out infinite;
             pointer-events: none;
         }
 
@@ -218,9 +218,9 @@
             position: absolute;
             width: 2px;
             height: 2px;
-            background: white;
+            background: #ffffff !important;
             border-radius: 50%;
-            box-shadow: 0 0 3px rgba(255,255,255,0.8);
+            box-shadow: 0 0 4px #ffffff, 0 0 6px rgba(255,255,255,0.6);
             animation: twinkle 2s ease-in-out infinite;
         }
 
@@ -416,13 +416,27 @@
 
         .subtitle {
             font-size: 18px;
-            color: rgba(255,255,255,0.9);
+            color: rgba(255,255,255,0.95);
             font-weight: 300;
             letter-spacing: 2px;
             animation: fadeInUp 0.8s ease 0.2s backwards;
             position: relative;
             z-index: 1;
             text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+            line-height: 1.6;
+        }
+
+        .love-note {
+            font-size: 15px;
+            color: rgba(255,255,255,0.85);
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
         @keyframes fadeInUp {
@@ -449,10 +463,10 @@
             position: absolute;
             width: 2px;
             height: 2px;
-            background: white;
+            background: #ffffff !important;
             border-radius: 50%;
             animation: twinkle 3s ease-in-out infinite;
-            box-shadow: 0 0 2px rgba(255,255,255,0.8);
+            box-shadow: 0 0 3px #ffffff, 0 0 5px rgba(255,255,255,0.5);
         }
 
         @keyframes twinkle {
@@ -464,10 +478,11 @@
             position: absolute;
             width: 4px;
             height: 4px;
-            background: rgba(255,255,255,0.6);
+            background: #ffffff !important;
             border-radius: 50%;
             pointer-events: none;
             animation: float 4s ease-in-out infinite;
+            box-shadow: 0 0 2px #ffffff;
         }
 
         @keyframes float {
@@ -497,12 +512,19 @@
             .heart {
                 font-size: 20px;
             }
+            .love-note {
+                font-size: 13px;
+                margin-top: 12px;
+            }
             .sunrise-container {
                 height: 220px;
             }
             .final-message {
-                padding: 40px 30px;
-                min-height: 220px;
+                padding: 40px 25px;
+                min-height: 240px;
+            }
+            .subtitle {
+                font-size: 16px;
             }
         }
     </style>
@@ -542,13 +564,13 @@
         <div class="stage" id="stage3">
             <div class="layers-container" id="layersContainer">
                 <div class="layer" data-layer="2" style="transform: translate(10px, 20px);">
-                    <div class="layer-text">her sabah</div>
+                    <div class="layer-text">her gün</div>
                 </div>
                 <div class="layer" data-layer="1" style="transform: translate(5px, 10px);">
-                    <div class="layer-text">senin için</div>
+                    <div class="layer-text">seni düşünüyorum</div>
                 </div>
                 <div class="layer" data-layer="0">
-                    <div class="layer-text">sadece bugün değil</div>
+                    <div class="layer-text">sen çok özelsin</div>
                 </div>
             </div>
             <div class="hint">katmanları herhangi yöne kaydır</div>
@@ -567,7 +589,8 @@
                     <span class="heart">❤️</span>
                     Günaydınnnn Ayşe
                 </div>
-                <div class="subtitle">sana özel</div>
+                <div class="subtitle">sana özel hazırlandı</div>
+                <div class="love-note">Her sabah senin yanında olmayı hayal ediyorum ✨</div>
             </div>
         </div>
     </div>
@@ -666,13 +689,13 @@
             e.preventDefault();
             playTone(200, 0.05);
             holdTimer = setInterval(() => {
-                holdProgress += 2;
+                holdProgress += 4;
                 sleepIcon.style.transform = `scale(${1 + holdProgress / 100})`;
                 sleepIcon.style.opacity = 1 - holdProgress / 100;
                 hint1.textContent = '...';
                 hint1.classList.remove('pulsing');
                 
-                if (holdProgress % 10 === 0) {
+                if (holdProgress % 20 === 0) {
                     playTone(200 + holdProgress * 3, 0.05);
                 }
                 
@@ -681,7 +704,7 @@
                     playTone(600, 0.3, 'triangle');
                     moveToStage(2);
                 }
-            }, 20);
+            }, 30);
         }
 
         function endHold() {
