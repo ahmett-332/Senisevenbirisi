@@ -602,8 +602,17 @@
             40% { transform: scale(1); }
         }
 
+        @keyframes heartBeatComplete {
+            0% { transform: scale(0.8); opacity: 0; }
+            20% { transform: scale(1.1); opacity: 1; }
+            40% { transform: scale(0.95); }
+            60% { transform: scale(1.05); }
+            80% { transform: scale(0.98); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .heart-fill-path.beating {
-            animation: heartbeat 1.2s ease-in-out 3;
+            animation: heartbeat 1.2s ease-in-out 3, heartBeatComplete 0.8s ease-out forwards;
             transform-origin: center;
         }
 
@@ -1379,13 +1388,20 @@
             setTimeout(() => {
                 createParticleExplosion(centerX, centerY);
                 
-                document.querySelectorAll('.heart-dot').forEach(dot => {
-                    dot.style.opacity = '0';
-                    dot.style.transform = 'scale(0)';
+                // Animate dots disappearing and heart appearing
+                document.querySelectorAll('.heart-dot').forEach((dot, index) => {
+                    setTimeout(() => {
+                        dot.style.transition = 'all 0.3s ease';
+                        dot.style.opacity = '0';
+                        dot.style.transform = 'scale(0)';
+                    }, index * 50);
                 });
-                heartPath.setAttribute('opacity', '0');
-                heartFill.setAttribute('opacity', '1');
-                heartFill.classList.add('beating');
+                
+                setTimeout(() => {
+                    heartPath.setAttribute('opacity', '0');
+                    heartFill.setAttribute('opacity', '1');
+                    heartFill.classList.add('beating');
+                }, 600);
                 
                 playMelody([
                     { freq: 660, duration: 0.3, delay: 0, type: 'sine' },
