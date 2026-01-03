@@ -591,32 +591,24 @@
         }
 
         .heart-fill-path {
-            transition: opacity 0.3s ease;
             fill: #ff1744;
+            transform-origin: center;
+            filter: drop-shadow(0 0 20px rgba(255, 23, 68, 0.8));
         }
 
-        @keyframes heartbeat {
+        @keyframes heartBeatAnim {
             0%, 100% { transform: scale(1); }
-            10% { transform: scale(1.08); }
-            20% { transform: scale(1); }
-            30% { transform: scale(1.05); }
-            40% { transform: scale(1); }
-        }
-
-        @keyframes heartBeatComplete {
-            0% { transform: scale(0.8); opacity: 0; fill: #ff1744; }
-            20% { transform: scale(1.1); opacity: 1; fill: #ff1744; }
-            40% { transform: scale(0.95); fill: #ff1744; }
-            60% { transform: scale(1.05); fill: #ff1744; }
-            80% { transform: scale(0.98); fill: #ff1744; }
-            100% { transform: scale(1); opacity: 1; fill: #ff1744; }
+            15% { transform: scale(1.1); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.08); }
+            60% { transform: scale(1); }
         }
 
         .heart-fill-path.beating {
-            animation: heartbeat 1.2s ease-in-out 3, heartBeatComplete 0.8s ease-out forwards;
+            animation: heartBeatAnim 1s ease-in-out infinite;
             transform-origin: center;
-            fill: #ff1744 !important;
             opacity: 1 !important;
+            transform: scale(1) !important;
         }
 
 
@@ -627,8 +619,9 @@
         .layers-container {
             position: relative;
             width: 100%;
+            max-width: 400px;
             height: 300px;
-            margin-bottom: 30px;
+            margin: 0 auto 30px auto;
             touch-action: pan-y;
         }
 
@@ -1043,7 +1036,7 @@
                                 </linearGradient>
                             </defs>
                             <path id="heartPath" stroke="url(#lineGradient)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="1" vector-effect="non-scaling-stroke" filter="url(#glow)"/>
-                            <path id="heartFill" fill="#ff1744" opacity="0" d="M150,270 C90,220 30,170 30,110 C30,60 70,30 110,30 C130,30 145,40 150,55 C155,40 170,30 190,30 C230,30 270,60 270,110 C270,170 210,220 150,270 Z" class="heart-fill-path"/>
+                            <path id="heartFill" fill="#ff1744" opacity="0" d="M150,270 C90,220 30,170 30,110 C30,60 70,30 110,30 C130,30 145,40 150,55 C155,40 170,30 190,30 C230,30 270,60 270,110 C270,170 210,220 150,270 Z" class="heart-fill-path" style="transform-origin: center; transform: scale(0.8);"/>
                         </svg>
                     </div>
                     <div id="heartDots"></div>
@@ -1055,10 +1048,10 @@
 
         <div class="stage" id="stage3">
             <div class="layers-container" id="layersContainer">
-                <div class="layer" data-layer="2" style="transform: translate(-50%, -50%) translate(10px, 20px);">
+                <div class="layer" data-layer="2" style="transform: translate(-50%, -50%);">
                     <div class="layer-text">Sabahın en tatlı kısmı</div>
                 </div>
-                <div class="layer" data-layer="1" style="transform: translate(-50%, -50%) translate(5px, 10px);">
+                <div class="layer" data-layer="1" style="transform: translate(-50%, -50%);">
                     <div class="layer-text">Seninle başlıyor</div>
                 </div>
                 <div class="layer" data-layer="0" style="transform: translate(-50%, -50%);">
@@ -1107,6 +1100,7 @@
         document.getElementById('musicToggle').addEventListener('click', toggleMusic);
         
         document.body.addEventListener('click', () => {
+            unlockAudio();
             if (!musicPlaying) {
                 bgMusicElement.play().then(() => {
                     musicPlaying = true;
@@ -1173,12 +1167,12 @@
             'Yavaşça tamamlanıyor 💗',
             'Kalp şekilleniyor 💝',
             'Seninle her an 💞',
-            'Neredeyse tamam 💓',
+            'Sensiz olmaz 💓',
             'Çok yaklaştın 💕',
             'Devam et 💖',
             'Son birkaç adım 💗',
             'Heyecan artıyor 💝',
-            'Tamam, son nokta! 💞'
+            'Son nokta, seni seviyorum! 💞'
         ];
         const starCount = isMobile ? 15 : 50;
         const particleCount = isMobile ? 5 : 20;
@@ -1378,38 +1372,45 @@
         }
 
         function completeHeart() {
+            const heartCanvas = document.getElementById('heartCanvas');
+            const centerX = heartCanvas.offsetWidth / 2;
+            const centerY = heartCanvas.offsetHeight / 2;
+            const pathElement = document.getElementById('heartPath');
+            const fillElement = document.getElementById('heartFill');
+            
+            // Mark all dots as completed
             document.querySelectorAll('.heart-dot').forEach(dot => {
                 dot.classList.remove('active', 'next-available');
                 dot.classList.add('completed');
             });
             
-            const heartCanvas = document.getElementById('heartCanvas');
-            const rect = heartCanvas.getBoundingClientRect();
-            const centerX = heartCanvas.offsetWidth / 2;
-            const centerY = heartCanvas.offsetHeight / 2;
-            
+            // Step 1: Particle explosion
             setTimeout(() => {
                 createParticleExplosion(centerX, centerY);
-                
-                // Animate dots disappearing and heart appearing
+            }, 300);
+            
+            // Step 2: Hide dots one by one
+            setTimeout(() => {
                 document.querySelectorAll('.heart-dot').forEach((dot, index) => {
                     setTimeout(() => {
-                        dot.style.transition = 'all 0.3s ease';
+                        dot.style.transition = 'all 0.4s ease';
                         dot.style.opacity = '0';
                         dot.style.transform = 'scale(0)';
-                    }, index * 50);
+                    }, index * 40);
                 });
+            }, 400);
+            
+            // Step 3: Hide the line path and show the filled heart
+            setTimeout(() => {
+                // Hide the connecting lines
+                pathElement.style.transition = 'opacity 0.5s ease';
+                pathElement.style.opacity = '0';
                 
-                setTimeout(() => {
-                    heartPath.setAttribute('opacity', '0');
-                    heartFill.setAttribute('opacity', '1');
-                    heartFill.classList.add('beating');
-                    
-                    // Make sure the heart is visible
-                    const heartFillElement = document.getElementById('heartFill');
-                    heartFillElement.style.fill = '#ff1744';
-                    heartFillElement.style.opacity = '1';
-                }, 600);
+                // Show the filled heart with animation
+                fillElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                fillElement.style.opacity = '1';
+                fillElement.style.transform = 'scale(1)';
+                fillElement.classList.add('beating');
                 
                 playMelody([
                     { freq: 660, duration: 0.3, delay: 0, type: 'sine' },
@@ -1417,14 +1418,16 @@
                     { freq: 1047, duration: 0.3, delay: 300, type: 'sine' },
                     { freq: 1319, duration: 0.4, delay: 500, type: 'sine' }
                 ]);
-            }, 400);
+            }, 1000);
             
+            // Step 4: Show congratulations message
             setTimeout(() => {
                 document.querySelector('#stage2Hint').style.display = 'none';
                 document.getElementById('heartCongrats').classList.add('show');
-            }, 800);
+            }, 1500);
             
-            setTimeout(() => moveToStage(3), 2500);
+            // Step 5: Move to next stage
+            setTimeout(() => moveToStage(3), 3000);
         }
 
         function endHeartPattern() {
@@ -1702,20 +1705,30 @@
             const birdsContainer = document.getElementById('birds');
             birdsContainer.innerHTML = '';
             
-            for (let i = 0; i < 3; i++) {
+            const birdTypes = ['🐦', '🕊️', '🐦'];
+            const positions = [
+                { top: 25, delay: 0, duration: 7 },
+                { top: 55, delay: 500, duration: 9 },
+                { top: 40, delay: 1000, duration: 8 },
+                { top: 70, delay: 1500, duration: 10 },
+                { top: 35, delay: 2000, duration: 6 }
+            ];
+            
+            positions.forEach((pos, i) => {
                 const bird = document.createElement('div');
                 bird.className = 'bird';
-                bird.textContent = '🐦';
-                bird.style.top = (15 + i * 35) + 'px';
+                bird.textContent = birdTypes[i % birdTypes.length];
+                bird.style.top = pos.top + 'px';
                 bird.style.left = '-30px';
-                bird.style.setProperty('--fly-duration', (8 + i * 2) + 's');
+                bird.style.setProperty('--fly-duration', pos.duration + 's');
+                bird.style.fontSize = (14 + Math.random() * 6) + 'px';
                 
                 setTimeout(() => {
                     bird.classList.add('flying');
-                }, i * 800);
+                }, pos.delay);
                 
                 birdsContainer.appendChild(bird);
-            }
+            });
         }
 
         function createGrass() {
@@ -1757,29 +1770,6 @@
             
             nameText.appendChild(line1);
             nameText.appendChild(line2);
-            
-            const revealText = document.getElementById('revealText');
-            const heartEmojis = ['💕', '💖', '💗', '💓', '💝', '💞'];
-            
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const heart = document.createElement('div');
-                    heart.className = 'floating-heart-decoration';
-                    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-                    heart.style.left = '50%';
-                    heart.style.top = '50%';
-                    
-                    const driftX = (Math.random() - 0.5) * 200;
-                    const rotate = (Math.random() - 0.5) * 360;
-                    heart.style.setProperty('--drift-x', driftX + 'px');
-                    heart.style.setProperty('--rotate', rotate + 'deg');
-                    
-                    heart.style.animationDelay = (Math.random() * 2) + 's';
-                    heart.style.animationDuration = (3 + Math.random() * 2) + 's';
-                    
-                    revealText.appendChild(heart);
-                }, i * 200);
-            }
         }
     </script>
 </body>
