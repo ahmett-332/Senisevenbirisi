@@ -194,6 +194,63 @@
             box-shadow: 0 15px 50px rgba(0,0,0,0.4), inset 0 -3px 15px rgba(255,255,255,0.1);
         }
 
+        .birds {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity 1s ease;
+            pointer-events: none;
+        }
+
+        .birds.visible {
+            opacity: 1;
+        }
+
+        .bird {
+            position: absolute;
+            font-size: 18px;
+            animation: flyBird 8s linear infinite;
+        }
+
+        @keyframes flyBird {
+            0% { transform: translate(-50px, 0) scale(0.8); }
+            50% { transform: translate(calc(50vw), -30px) scale(1); }
+            100% { transform: translate(calc(100% + 100px), -10px) scale(0.8); }
+        }
+
+        .grass-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+            pointer-events: none;
+        }
+
+        .grass-container.visible {
+            opacity: 1;
+        }
+
+        .grass {
+            position: absolute;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to top, #2d5016, #4a7c2c);
+            border-radius: 2px 2px 0 0;
+            animation: growGrass 0.8s ease-out forwards;
+            transform-origin: bottom;
+        }
+
+        @keyframes growGrass {
+            from { height: 0; }
+            to { height: var(--grass-height); }
+        }
+
         .sunrise-container.daylight {
             background: linear-gradient(to bottom, #87ceeb 0%, #b0d4f1 20%, #ffd4a3 40%, #ffa07a 60%, #ffb6c1 80%, #ffc0cb 100%);
         }
@@ -344,9 +401,19 @@
             color: rgba(255,255,255,0.95) !important;
             font-size: 18px;
             letter-spacing: 1.5px;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             text-shadow: 0 3px 15px rgba(0,0,0,0.4);
             font-weight: 400;
+            min-height: 25px;
+        }
+
+        .hint.pulse {
+            animation: hintPulse 0.6s ease;
+        }
+
+        @keyframes hintPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); color: #ffc0cb !important; }
         }
 
         .congratulations {
@@ -502,9 +569,10 @@
 
         .layer {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
             height: 100%;
             display: flex;
             align-items: center;
@@ -585,7 +653,7 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
-            z-index: 1;
+            z-index: 2;
             text-shadow: 0 5px 35px rgba(0,0,0,0.5);
         }
 
@@ -609,15 +677,27 @@
         .floating-heart-decoration {
             position: absolute;
             font-size: 24px;
-            animation: floatAround 4s ease-in-out infinite;
+            animation: heartRain 4s ease-in-out infinite;
             pointer-events: none;
+            z-index: 0;
         }
 
-        @keyframes floatAround {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.7; }
-            25% { transform: translate(10px, -10px) rotate(5deg); opacity: 1; }
-            50% { transform: translate(-5px, -20px) rotate(-5deg); opacity: 0.8; }
-            75% { transform: translate(-10px, -10px) rotate(3deg); opacity: 1; }
+        @keyframes heartRain {
+            0% { 
+                transform: translateY(-100px) translateX(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% { 
+                transform: translateY(80px) translateX(var(--drift-x)) rotate(var(--rotate)) scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(200px) translateX(var(--drift-x)) rotate(var(--rotate)) scale(0.8);
+                opacity: 0;
+            }
         }
 
         .heart {
@@ -858,6 +938,8 @@
                 <div class="moon" id="moon"></div>
                 <div class="clouds" id="clouds"></div>
                 <div class="sky-gradient" id="skyGradient"></div>
+                <div class="birds" id="birds"></div>
+                <div class="grass-container" id="grassContainer"></div>
                 <div class="horizon"></div>
                 <div class="sun" id="sun"></div>
             </div>
@@ -896,13 +978,13 @@
 
         <div class="stage" id="stage3">
             <div class="layers-container" id="layersContainer">
-                <div class="layer" data-layer="2" style="transform: translate(10px, 20px);">
+                <div class="layer" data-layer="2" style="transform: translate(-50%, -50%) translate(10px, 20px);">
                     <div class="layer-text">Sabahın en tatlı kısmı</div>
                 </div>
-                <div class="layer" data-layer="1" style="transform: translate(5px, 10px);">
+                <div class="layer" data-layer="1" style="transform: translate(-50%, -50%) translate(5px, 10px);">
                     <div class="layer-text">Seninle başlıyor</div>
                 </div>
-                <div class="layer" data-layer="0">
+                <div class="layer" data-layer="0" style="transform: translate(-50%, -50%);">
                     <div class="layer-text">Kalbim sende</div>
                 </div>
             </div>
@@ -941,7 +1023,7 @@
                 setTimeout(() => {
                     document.getElementById('loadingScreen').remove();
                 }, 500);
-            }, 2000);
+            }, 3000);
         });
 
         document.getElementById('musicToggle').addEventListener('click', toggleMusic);
@@ -1103,6 +1185,21 @@
         }
         
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        const heartDotMessages = [
+            'Kalbin ilk atışı... 💓',
+            'Her vuruşta sen varsın 💕',
+            'Sevgi çizgisi güçleniyor 💖',
+            'Yavaşça tamamlanıyor 💗',
+            'Kalp şekilleniyor 💝',
+            'Seninle her an 💞',
+            'Neredeyse tamam 💓',
+            'Çok yaklaştın 💕',
+            'Devam et 💖',
+            'Son birkaç adım 💗',
+            'Heyecan artıyor 💝',
+            'Tamam, son nokta! 💞'
+        ];
         const starCount = isMobile ? 15 : 50;
         const particleCount = isMobile ? 5 : 20;
         const nightStarCount = isMobile ? 10 : 30;
@@ -1212,23 +1309,39 @@
         function handleDotTap(index) {
             if (currentStage !== 2) return;
             
-            if (heartPattern.length === 0) {
+            function startHeartPattern(index) {
                 heartPattern = [index];
-                updateHeartDots();
+                drawing = true;
+                updateHeartPath();
                 updateNextAvailableDots();
-                playTone(520, 0.06);
-            } else if (!heartPattern.includes(index)) {
+                updateHintMessage(0);
+            }
+
+            function updateHintMessage(dotIndex) {
+                const hint = document.querySelector('#stage2 .hint');
+                if (hint && heartDotMessages[dotIndex]) {
+                    hint.textContent = heartDotMessages[dotIndex];
+                    hint.classList.remove('pulse');
+                    void hint.offsetWidth;
+                    hint.classList.add('pulse');
+                }
+            }
+
+            playTone(520, 0.06);
+
+            function continueHeartPattern(index) {
                 const lastIndex = heartPattern[heartPattern.length - 1];
                 const distance = Math.abs(index - lastIndex);
                 
                 if (distance === 1 || distance === 11) {
                     heartPattern.push(index);
-                    updateHeartDots();
                     updateHeartPath();
                     updateNextAvailableDots();
-                    playTone(520 + heartPattern.length * 40, 0.08);
+                    updateHintMessage(heartPattern.length - 1);
+                    playTone(440 + (index * 40), 0.15);
                     
-                    if (heartPattern.length === heartDotPositions.length) {
+                    if (heartPattern.length === 12) {
+                        drawing = false;
                         completeHeart();
                     }
                 }
@@ -1254,15 +1367,16 @@
         function startHeartPattern(e, index) {
             if (currentStage !== 2) return;
             e.preventDefault();
-            heartDrawing = true;
             heartPattern = [index];
-            updateHeartDots();
+            drawing = true;
             updateHeartPath();
+            updateNextAvailableDots();
+            updateHintMessage(0);
             playTone(520, 0.06);
         }
 
         function continueHeartPattern(e) {
-            if (!heartDrawing || currentStage !== 2) return;
+            if (!drawing || currentStage !== 2) return;
             e.preventDefault();
             
             const touch = e.touches ? e.touches[0] : e;
@@ -1277,9 +1391,10 @@
                     const distance = Math.abs(index - lastIndex);
                     if (distance === 1 || distance === 11) {
                         heartPattern.push(index);
-                        updateHeartDots();
                         updateHeartPath();
-                        playTone(520 + heartPattern.length * 40, 0.08);
+                        updateNextAvailableDots();
+                        updateHintMessage(heartPattern.length - 1);
+                        playTone(440 + (index * 40), 0.15);
                     }
                 }
             }
@@ -1323,8 +1438,8 @@
         }
 
         function endHeartPattern() {
-            if (!heartDrawing) return;
-            heartDrawing = false;
+            if (!drawing) return;
+            drawing = false;
             
             const allConnected = isHeartComplete();
             
@@ -1433,6 +1548,8 @@
                     moon.classList.add('hidden');
                     starsNightEl.classList.add('hidden');
                     cloudsEl.classList.add('visible');
+                    document.getElementById('birds').classList.add('visible');
+                    document.getElementById('grassContainer').classList.add('visible');
                 }
                 
                 if (Math.floor(sunProgress * 10) > Math.floor(prevProgress * 10)) {
@@ -1454,6 +1571,8 @@
                 moon.classList.add('hidden');
                 starsNightEl.classList.add('hidden');
                 cloudsEl.classList.add('visible');
+                document.getElementById('birds').classList.add('visible');
+                document.getElementById('grassContainer').classList.add('visible');
                 playTone(800, 0.5, 'triangle');
                 setTimeout(() => moveToStage(2), 800);
             } else {
@@ -1576,6 +1695,34 @@
             }
         }
 
+        function createBirds() {
+            const birdsContainer = document.getElementById('birds');
+            const birdEmojis = ['🕊️', '🐦', '🦅'];
+            
+            for (let i = 0; i < 5; i++) {
+                const bird = document.createElement('div');
+                bird.className = 'bird';
+                bird.textContent = birdEmojis[Math.floor(Math.random() * birdEmojis.length)];
+                bird.style.top = (20 + Math.random() * 100) + 'px';
+                bird.style.animationDelay = (i * 1.5) + 's';
+                bird.style.animationDuration = (6 + Math.random() * 4) + 's';
+                birdsContainer.appendChild(bird);
+            }
+        }
+
+        function createGrass() {
+            const grassContainer = document.getElementById('grassContainer');
+            
+            for (let i = 0; i < 80; i++) {
+                const grass = document.createElement('div');
+                grass.className = 'grass';
+                grass.style.left = (Math.random() * 100) + '%';
+                grass.style.setProperty('--grass-height', (15 + Math.random() * 25) + 'px');
+                grass.style.animationDelay = (Math.random() * 1.2) + 's';
+                grassContainer.appendChild(grass);
+            }
+        }
+
         function animateName() {
             const nameText = document.getElementById('nameText');
             nameText.innerHTML = '';
@@ -1603,34 +1750,27 @@
             nameText.appendChild(line2);
             
             const revealText = document.getElementById('revealText');
-            const heartPositions = [
-                { left: -80, top: -30 },
-                { left: -60, top: 10 },
-                { left: -70, top: 50 },
-                { left: -50, top: 90 },
-                { left: 80, top: -30 },
-                { left: 60, top: 10 },
-                { left: 70, top: 50 },
-                { left: 50, top: 90 },
-                { left: -20, top: -50 },
-                { left: 20, top: -50 },
-                { left: 0, top: 110 },
-                { left: -35, top: 70 },
-                { left: 35, top: 70 },
-                { left: 0, top: -10 }
-            ];
+            const heartEmojis = ['💕', '💖', '💗', '💓', '💝', '💞'];
             
-            heartPositions.forEach((pos, i) => {
+            for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
                     heart.className = 'floating-heart-decoration';
-                    heart.textContent = ['💕', '💖', '💗', '💓', '💝', '💞', '💕', '💖', '💗', '💓', '💝', '💞', '💕', '💖'][i];
-                    heart.style.left = pos.left + 'px';
-                    heart.style.top = pos.top + 'px';
+                    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    heart.style.left = '0';
+                    heart.style.top = '-100px';
+                    
+                    const driftX = (Math.random() - 0.5) * 100;
+                    const rotate = (Math.random() - 0.5) * 360;
+                    heart.style.setProperty('--drift-x', driftX + 'px');
+                    heart.style.setProperty('--rotate', rotate + 'deg');
+                    
                     heart.style.animationDelay = (Math.random() * 2) + 's';
+                    heart.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    
                     revealText.appendChild(heart);
-                }, i * 100);
-            });
+                }, i * 200);
+            }
         }
     </script>
 </body>
