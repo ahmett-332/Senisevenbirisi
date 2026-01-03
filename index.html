@@ -6,6 +6,139 @@
     <meta name="color-scheme" content="light only">
     <title>...</title>
     <style>
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #ec4899 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loadingScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .heart-loader {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            animation: heartBeat 1.2s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.15); }
+        }
+
+        .heart-loader::before,
+        .heart-loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 52px;
+            height: 80px;
+            border-radius: 50px 50px 0 0;
+            background: #ff1744;
+        }
+
+        .heart-loader::before {
+            left: 0;
+            transform: rotate(-45deg);
+            transform-origin: 100% 100%;
+        }
+
+        .heart-loader::after {
+            right: 0;
+            transform: rotate(45deg);
+            transform-origin: 0% 100%;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 24px;
+            margin-top: 40px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff1744, #ff6b9d, #ff1744);
+            background-size: 200% 100%;
+            animation: progressFill 2s ease-out forwards, shimmer 1.5s linear infinite;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255,23,68,0.8);
+        }
+
+        @keyframes progressFill {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        .music-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            font-size: 24px;
+            user-select: none;
+        }
+
+        .music-toggle:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        .music-toggle:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 480px) {
+            .music-toggle {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 20px;
+            }
+        }
         * {
             margin: 0;
             padding: 0;
@@ -323,6 +456,23 @@
             50% { transform: scale(1.15); opacity: 0.85; }
         }
 
+        .explosion-particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
         .heart-path {
             position: absolute;
             top: 0;
@@ -403,19 +553,22 @@
         }
 
         .final-message {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(30px);
-            border: 2px solid rgba(255,255,255,0.4);
-            border-radius: 32px;
-            padding: 70px 50px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             position: relative;
-            overflow: hidden;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 280px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .final-message::before {
@@ -440,11 +593,41 @@
             color: #fff !important;
             letter-spacing: 4px;
             margin-bottom: 24px;
-            animation: fadeInUp 0.8s ease;
             position: relative;
             display: inline-block;
             z-index: 1;
             text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+        }
+
+        .reveal-text .letter {
+            display: inline-block;
+            opacity: 0;
+            animation: letterReveal 0.5s ease forwards;
+        }
+
+        @keyframes letterReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) rotate(-10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        .floating-heart-decoration {
+            position: absolute;
+            font-size: 24px;
+            animation: floatAround 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatAround {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.7; }
+            25% { transform: translate(10px, -10px) rotate(5deg); opacity: 1; }
+            50% { transform: translate(-5px, -20px) rotate(-5deg); opacity: 0.8; }
+            75% { transform: translate(-10px, -10px) rotate(3deg); opacity: 1; }
         }
 
         .heart {
@@ -641,8 +824,12 @@
                 overflow: visible;
             }
             .final-message {
-                padding: 40px 25px;
-                min-height: 240px;
+                padding: 40px 20px;
+                min-height: 280px;
+                max-width: 90%;
+            }
+            .reveal-text {
+                font-size: 38px;
             }
             .subtitle {
                 font-size: 16px;
@@ -651,6 +838,17 @@
     </style>
 </head>
 <body>
+    <div id="loadingScreen">
+        <div class="heart-loader"></div>
+        <div class="loading-text">Hazırlanıyor...</div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="music-toggle" id="musicToggle" title="Müzik Aç/Kapat">
+        🎵
+    </div>
     <div class="stars" id="stars"></div>
     
     <div class="container">
@@ -671,7 +869,21 @@
                 <div class="heart-canvas" id="heartCanvas">
                     <div class="heart-path">
                         <svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
-                            <path id="heartPath" stroke="#ff1a75" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="1" vector-effect="non-scaling-stroke"/>
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#ff1a75;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#ff6b9d;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#ff1a75;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path id="heartPath" stroke="url(#lineGradient)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="1" vector-effect="non-scaling-stroke" filter="url(#glow)"/>
                             <path id="heartFill" fill="#ff1744" opacity="0" d="M150,270 C90,220 30,170 30,110 C30,60 70,30 110,30 C130,30 145,40 150,55 C155,40 170,30 190,30 C230,30 270,60 270,110 C270,170 210,220 150,270 Z" class="heart-fill-path"/>
                         </svg>
                     </div>
@@ -699,7 +911,7 @@
 
         <div class="stage" id="stage4">
             <div class="final-message">
-                <div class="reveal-text">
+                <div class="reveal-text" id="revealText">
                     <span class="heart">❤️</span>
                     <span class="heart">❤️</span>
                     <span class="heart">❤️</span>
@@ -708,7 +920,7 @@
                     <span class="heart">❤️</span>
                     <span class="heart">❤️</span>
                     <span class="heart">❤️</span>
-                    Günaydınnnn Ayşe
+                    <span id="nameText"></span>
                 </div>
                 <div class="subtitle">Bu site sadece senin için yapıldı</div>
             </div>
@@ -719,6 +931,86 @@
         let currentStage = 1;
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         let audioUnlocked = false;
+        let musicPlaying = false;
+        let musicGainNode = null;
+        let musicOscillators = [];
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').remove();
+                }, 500);
+            }, 2000);
+        });
+
+        document.getElementById('musicToggle').addEventListener('click', toggleMusic);
+
+        function toggleMusic() {
+            if (!audioUnlocked) {
+                unlockAudio();
+            }
+            
+            if (musicPlaying) {
+                stopMusic();
+                document.getElementById('musicToggle').textContent = '🎵';
+                musicPlaying = false;
+            } else {
+                startMusic();
+                document.getElementById('musicToggle').textContent = '🔇';
+                musicPlaying = true;
+            }
+        }
+
+        function startMusic() {
+            if (!audioUnlocked) return;
+            
+            musicGainNode = audioContext.createGain();
+            musicGainNode.gain.setValueAtTime(0.02, audioContext.currentTime);
+            musicGainNode.connect(audioContext.destination);
+
+            const melody = [
+                { freq: 523.25, duration: 2 },
+                { freq: 587.33, duration: 2 },
+                { freq: 659.25, duration: 2 },
+                { freq: 698.46, duration: 2 },
+                { freq: 783.99, duration: 2 },
+                { freq: 698.46, duration: 2 },
+                { freq: 659.25, duration: 2 },
+                { freq: 587.33, duration: 2 }
+            ];
+
+            let currentTime = audioContext.currentTime;
+            const loopMusic = () => {
+                if (!musicPlaying) return;
+                
+                melody.forEach((note, index) => {
+                    const osc = audioContext.createOscillator();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(note.freq, currentTime + index * note.duration);
+                    osc.connect(musicGainNode);
+                    osc.start(currentTime + index * note.duration);
+                    osc.stop(currentTime + (index + 1) * note.duration);
+                    musicOscillators.push(osc);
+                });
+
+                currentTime += melody.length * 2;
+                setTimeout(loopMusic, melody.length * 2000);
+            };
+
+            loopMusic();
+        }
+
+        function stopMusic() {
+            musicOscillators.forEach(osc => {
+                try { osc.stop(); } catch(e) {}
+            });
+            musicOscillators = [];
+            if (musicGainNode) {
+                musicGainNode.disconnect();
+                musicGainNode = null;
+            }
+        }
 
         function playTone(frequency, duration, type = 'sine') {
             if (!audioUnlocked) return;
@@ -736,6 +1028,54 @@
             
             oscillator.start(audioContext.currentTime);
             oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playMelody(notes) {
+            if (!audioUnlocked) return;
+            notes.forEach((note, index) => {
+                setTimeout(() => {
+                    playTone(note.freq, note.duration, note.type || 'sine');
+                }, note.delay);
+            });
+        }
+
+        function createParticleExplosion(x, y) {
+            const colors = ['#ff1744', '#ff6b9d', '#ff1a75', '#ffc0cb', '#ff69b4'];
+            const emojis = ['❤️', '💕', '💖', '💗', '💓', '💝'];
+            const container = document.getElementById('heartCanvas');
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'explosion-particle';
+                
+                const useEmoji = Math.random() > 0.5;
+                if (useEmoji) {
+                    particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    particle.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                } else {
+                    particle.style.width = (Math.random() * 8 + 4) + 'px';
+                    particle.style.height = particle.style.width;
+                    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.borderRadius = '50%';
+                }
+                
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.position = 'absolute';
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = Math.random() * 100 + 50;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animation = `explode ${Math.random() * 0.5 + 0.8}s ease-out forwards`;
+                
+                container.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1500);
+            }
         }
 
         function unlockAudio() {
@@ -936,7 +1276,14 @@
                 dot.classList.add('completed');
             });
             
+            const heartCanvas = document.getElementById('heartCanvas');
+            const rect = heartCanvas.getBoundingClientRect();
+            const centerX = heartCanvas.offsetWidth / 2;
+            const centerY = heartCanvas.offsetHeight / 2;
+            
             setTimeout(() => {
+                createParticleExplosion(centerX, centerY);
+                
                 document.querySelectorAll('.heart-dot').forEach(dot => {
                     dot.style.opacity = '0';
                     dot.style.transform = 'scale(0)';
@@ -944,9 +1291,13 @@
                 heartPath.setAttribute('opacity', '0');
                 heartFill.setAttribute('opacity', '1');
                 heartFill.classList.add('beating');
-                playTone(660, 0.4, 'sine');
-                setTimeout(() => playTone(880, 0.3, 'sine'), 150);
-                setTimeout(() => playTone(1047, 0.5, 'sine'), 300);
+                
+                playMelody([
+                    { freq: 660, duration: 0.3, delay: 0, type: 'sine' },
+                    { freq: 880, duration: 0.25, delay: 150, type: 'sine' },
+                    { freq: 1047, duration: 0.3, delay: 300, type: 'sine' },
+                    { freq: 1319, duration: 0.4, delay: 500, type: 'sine' }
+                ]);
             }, 400);
             
             setTimeout(() => {
@@ -1186,6 +1537,55 @@
             document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
             document.getElementById(`stage${stage}`).classList.add('active');
             currentStage = stage;
+            
+            if (stage === 2) {
+                playMelody([
+                    { freq: 523, duration: 0.15, delay: 0 },
+                    { freq: 659, duration: 0.15, delay: 150 },
+                    { freq: 784, duration: 0.2, delay: 300 }
+                ]);
+            } else if (stage === 3) {
+                playMelody([
+                    { freq: 698, duration: 0.15, delay: 0 },
+                    { freq: 880, duration: 0.15, delay: 150 },
+                    { freq: 1047, duration: 0.2, delay: 300 }
+                ]);
+            } else if (stage === 4) {
+                playMelody([
+                    { freq: 784, duration: 0.2, delay: 0 },
+                    { freq: 988, duration: 0.2, delay: 200 },
+                    { freq: 1175, duration: 0.2, delay: 400 },
+                    { freq: 1397, duration: 0.3, delay: 600 }
+                ]);
+                animateName();
+            }
+        }
+
+        function animateName() {
+            const nameText = document.getElementById('nameText');
+            const text = 'Günaydınnnn Ayşe';
+            nameText.innerHTML = '';
+            
+            text.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.className = 'letter';
+                span.textContent = char;
+                span.style.animationDelay = (index * 0.08) + 's';
+                nameText.appendChild(span);
+            });
+            
+            const revealText = document.getElementById('revealText');
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart-decoration';
+                    heart.textContent = ['💕', '💖', '💗', '💓', '💝', '💞', '💕', '💖'][i];
+                    heart.style.left = (Math.random() * 100 - 50) + 'px';
+                    heart.style.top = (Math.random() * 80 - 40) + 'px';
+                    heart.style.animationDelay = (Math.random() * 2) + 's';
+                    revealText.appendChild(heart);
+                }, i * 150);
+            }
         }
     </script>
 </body>
