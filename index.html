@@ -229,7 +229,8 @@
             opacity: 0;
             transition: opacity 1.5s ease;
             pointer-events: none;
-            overflow: hidden;
+            overflow: visible;
+            z-index: 10;
         }
 
         .birds.visible {
@@ -1427,7 +1428,7 @@
             }, 1500);
             
             // Step 5: Move to next stage
-            setTimeout(() => moveToStage(3), 3000);
+            setTimeout(() => moveToStage(3), 5000);
         }
 
         function endHeartPattern() {
@@ -1577,7 +1578,7 @@
                 setTimeout(() => {
                     sun.style.transition = '';
                     moveToStage(2);
-                }, 1500);
+                }, 2500);
             } else {
                 sun.style.bottom = '20px';
                 sun.style.transform = 'translateX(-50%) scale(1)';
