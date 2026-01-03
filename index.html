@@ -27,68 +27,45 @@
         }
 
         .heart-loader {
-            width: 100px;
-            height: 100px;
-            position: relative;
-            animation: heartBeat 1.2s ease-in-out infinite;
+            font-size: 80px;
+            animation: heartBeat 1s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(255,23,68,0.8));
         }
 
         @keyframes heartBeat {
             0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.1); }
+            25% { transform: scale(1.15); }
             50% { transform: scale(1); }
-            75% { transform: scale(1.15); }
-        }
-
-        .heart-loader::before,
-        .heart-loader::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            width: 52px;
-            height: 80px;
-            border-radius: 52px 52px 0 0;
-            background: #ff1744;
-            box-shadow: 0 0 30px rgba(255,23,68,0.8);
-        }
-
-        .heart-loader::before {
-            left: 24px;
-            transform: rotate(-45deg);
-            transform-origin: 0 100%;
-        }
-
-        .heart-loader::after {
-            left: 24px;
-            transform: rotate(45deg);
-            transform-origin: 100% 100%;
+            75% { transform: scale(1.2); }
         }
 
         .loading-text {
             color: white;
-            font-size: 24px;
-            margin-top: 40px;
-            font-weight: 300;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            font-size: 28px;
+            margin-top: 50px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-shadow: 0 3px 15px rgba(0,0,0,0.4);
         }
 
         .progress-bar {
-            width: 200px;
-            height: 4px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 10px;
-            margin-top: 20px;
+            width: 250px;
+            height: 6px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            margin-top: 30px;
             overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #ff1744, #ff6b9d, #ff1744);
+            background: linear-gradient(90deg, #ff1744 0%, #ff6b9d 25%, #ffc0cb 50%, #ff6b9d 75%, #ff1744 100%);
             background-size: 200% 100%;
-            animation: progressFill 2s ease-out forwards, shimmer 1.5s linear infinite;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255,23,68,0.8);
+            animation: progressFill 2s cubic-bezier(0.4, 0, 0.2, 1) forwards, shimmer 2s linear infinite;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255,23,68,1), inset 0 1px 2px rgba(255,255,255,0.5);
         }
 
         @keyframes progressFill {
@@ -208,17 +185,17 @@
         .sunrise-container {
             position: relative;
             width: 100%;
-            height: 400px;
+            height: 450px;
             margin: 0 auto 40px;
             overflow: hidden;
-            background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 50%, #2a2f4a 100%);
-            border-radius: 20px;
-            transition: background 1s ease;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 -2px 10px rgba(255,255,255,0.1);
+            background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 40%, #2a2f4a 80%, #3a3f5a 100%);
+            border-radius: 24px;
+            transition: background 1.5s ease;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4), inset 0 -3px 15px rgba(255,255,255,0.1);
         }
 
         .sunrise-container.daylight {
-            background: linear-gradient(to bottom, #87ceeb 0%, #ffa07a 50%, #ffb6c1 100%);
+            background: linear-gradient(to bottom, #87ceeb 0%, #b0d4f1 20%, #ffd4a3 40%, #ffa07a 60%, #ffb6c1 80%, #ffc0cb 100%);
         }
 
         .horizon {
@@ -235,13 +212,14 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             background: radial-gradient(circle at 30% 30%, #fff59d, #ffd700 40%, #ff8c00);
             border-radius: 50%;
             cursor: grab;
             box-shadow: 0 0 50px rgba(255,215,0,0.7), 0 0 100px rgba(255,215,0,0.3);
             transition: box-shadow 0.3s ease;
+            max-width: calc(100% - 40px);
         }
 
         .sun::before {
@@ -363,12 +341,12 @@
         }
 
         .hint {
-            color: rgba(255,255,255,0.9) !important;
-            font-size: 15px;
-            letter-spacing: 1px;
+            color: rgba(255,255,255,0.95) !important;
+            font-size: 18px;
+            letter-spacing: 1.5px;
             transition: all 0.3s ease;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            font-weight: 300;
+            text-shadow: 0 3px 15px rgba(0,0,0,0.4);
+            font-weight: 400;
         }
 
         .congratulations {
@@ -377,10 +355,10 @@
             left: 50%;
             transform: translateX(-50%) translateY(20px);
             color: #ff1744 !important;
-            font-size: 18px;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 15px rgba(255,23,68,0.6);
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-shadow: 0 3px 20px rgba(255,23,68,0.8);
             opacity: 0;
             transition: all 0.5s ease;
             pointer-events: none;
@@ -550,11 +528,11 @@
         }
 
         .layer-text {
-            font-size: 26px;
+            font-size: 32px;
             color: #fff !important;
-            font-weight: 300;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            font-weight: 400;
+            letter-spacing: 2.5px;
+            text-shadow: 0 3px 25px rgba(0,0,0,0.4);
         }
 
         #stage4 {
@@ -597,18 +575,18 @@
         }
 
         .reveal-text {
-            font-size: 52px;
-            font-weight: 600;
+            font-size: 60px;
+            font-weight: 700;
             color: #fff !important;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             margin-bottom: 24px;
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             z-index: 1;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+            text-shadow: 0 5px 35px rgba(0,0,0,0.5);
         }
 
         .reveal-text .letter {
@@ -707,14 +685,14 @@
         }
 
         .subtitle {
-            font-size: 18px;
+            font-size: 22px;
             color: rgba(255,255,255,0.95) !important;
-            font-weight: 300;
-            letter-spacing: 2px;
+            font-weight: 400;
+            letter-spacing: 2.5px;
             animation: fadeInUp 0.8s ease 0.2s backwards;
             position: relative;
             z-index: 1;
-            text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+            text-shadow: 0 3px 20px rgba(0,0,0,0.4);
             line-height: 1.6;
         }
 
@@ -841,18 +819,27 @@
                 max-width: 90%;
             }
             .reveal-text {
-                font-size: 32px;
-                gap: 4px;
+                font-size: 38px;
+                gap: 6px;
             }
             .subtitle {
+                font-size: 18px;
+            }
+            .layer-text {
+                font-size: 26px;
+            }
+            .hint {
                 font-size: 16px;
+            }
+            .sunrise-container {
+                height: 380px;
             }
         }
     </style>
 </head>
 <body>
     <div id="loadingScreen">
-        <div class="heart-loader"></div>
+        <div class="heart-loader">❤️</div>
         <div class="loading-text">Hazırlanıyor...</div>
         <div class="progress-bar">
             <div class="progress-fill"></div>
@@ -978,19 +965,19 @@
         function startMusic() {
             if (!audioUnlocked) return;
             
-            musicGainNode = audioContext.createGain();
-            musicGainNode.gain.setValueAtTime(0.015, audioContext.currentTime);
-            musicGainNode.connect(audioContext.destination);
-
             const melody = [
-                { freq: 523.25, duration: 1.5 },
-                { freq: 587.33, duration: 1.5 },
-                { freq: 659.25, duration: 1.5 },
-                { freq: 698.46, duration: 1.5 },
-                { freq: 783.99, duration: 1.5 },
-                { freq: 698.46, duration: 1.5 },
-                { freq: 659.25, duration: 1.5 },
-                { freq: 587.33, duration: 1.5 }
+                { freq: 523.25, duration: 0.8 },
+                { freq: 659.25, duration: 0.8 },
+                { freq: 783.99, duration: 0.8 },
+                { freq: 880.00, duration: 0.8 },
+                { freq: 783.99, duration: 0.8 },
+                { freq: 659.25, duration: 0.8 },
+                { freq: 587.33, duration: 0.8 },
+                { freq: 523.25, duration: 0.8 },
+                { freq: 659.25, duration: 0.8 },
+                { freq: 783.99, duration: 0.8 },
+                { freq: 1046.50, duration: 0.8 },
+                { freq: 880.00, duration: 1.2 }
             ];
 
             const loopMusic = () => {
@@ -998,25 +985,32 @@
                 
                 let startTime = audioContext.currentTime;
                 melody.forEach((note, index) => {
-                    const osc = audioContext.createOscillator();
+                    const osc1 = audioContext.createOscillator();
+                    const osc2 = audioContext.createOscillator();
                     const gain = audioContext.createGain();
                     
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(note.freq, startTime + index * note.duration);
+                    osc1.type = 'sine';
+                    osc2.type = 'sine';
+                    osc1.frequency.setValueAtTime(note.freq, startTime + index * note.duration);
+                    osc2.frequency.setValueAtTime(note.freq * 2, startTime + index * note.duration);
                     
-                    gain.gain.setValueAtTime(0.015, startTime + index * note.duration);
+                    gain.gain.setValueAtTime(0.01, startTime + index * note.duration);
                     gain.gain.exponentialRampToValueAtTime(0.001, startTime + (index + 1) * note.duration);
                     
-                    osc.connect(gain);
+                    osc1.connect(gain);
+                    osc2.connect(gain);
                     gain.connect(audioContext.destination);
                     
-                    osc.start(startTime + index * note.duration);
-                    osc.stop(startTime + (index + 1) * note.duration);
+                    osc1.start(startTime + index * note.duration);
+                    osc2.start(startTime + index * note.duration);
+                    osc1.stop(startTime + (index + 1) * note.duration);
+                    osc2.stop(startTime + (index + 1) * note.duration);
                     
-                    musicOscillators.push(osc);
+                    musicOscillators.push(osc1, osc2);
                 });
 
-                setTimeout(loopMusic, melody.length * 1500);
+                const totalDuration = melody.reduce((sum, note) => sum + note.duration, 0);
+                setTimeout(loopMusic, totalDuration * 1000);
             };
 
             loopMusic();
@@ -1610,28 +1604,32 @@
             
             const revealText = document.getElementById('revealText');
             const heartPositions = [
-                { left: -60, top: -20 },
-                { left: 60, top: -20 },
-                { left: -70, top: 30 },
-                { left: 70, top: 30 },
-                { left: -40, top: 80 },
-                { left: 40, top: 80 },
-                { left: 0, top: -40 },
-                { left: 0, top: 100 },
-                { left: -50, top: 5 },
-                { left: 50, top: 5 }
+                { left: -80, top: -30 },
+                { left: -60, top: 10 },
+                { left: -70, top: 50 },
+                { left: -50, top: 90 },
+                { left: 80, top: -30 },
+                { left: 60, top: 10 },
+                { left: 70, top: 50 },
+                { left: 50, top: 90 },
+                { left: -20, top: -50 },
+                { left: 20, top: -50 },
+                { left: 0, top: 110 },
+                { left: -35, top: 70 },
+                { left: 35, top: 70 },
+                { left: 0, top: -10 }
             ];
             
             heartPositions.forEach((pos, i) => {
                 setTimeout(() => {
                     const heart = document.createElement('div');
                     heart.className = 'floating-heart-decoration';
-                    heart.textContent = ['💕', '💖', '💗', '💓', '💝', '💞', '💕', '💖', '💗', '💓'][i];
+                    heart.textContent = ['💕', '💖', '💗', '💓', '💝', '💞', '💕', '💖', '💗', '💓', '💝', '💞', '💕', '💖'][i];
                     heart.style.left = pos.left + 'px';
                     heart.style.top = pos.top + 'px';
                     heart.style.animationDelay = (Math.random() * 2) + 's';
                     revealText.appendChild(heart);
-                }, i * 120);
+                }, i * 100);
             });
         }
     </script>
