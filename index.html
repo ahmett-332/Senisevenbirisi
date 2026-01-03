@@ -47,20 +47,21 @@
             top: 0;
             width: 52px;
             height: 80px;
-            border-radius: 50px 50px 0 0;
+            border-radius: 52px 52px 0 0;
             background: #ff1744;
+            box-shadow: 0 0 30px rgba(255,23,68,0.8);
         }
 
         .heart-loader::before {
-            left: 0;
+            left: 24px;
             transform: rotate(-45deg);
-            transform-origin: 100% 100%;
+            transform-origin: 0 100%;
         }
 
         .heart-loader::after {
-            right: 0;
+            left: 24px;
             transform: rotate(45deg);
-            transform-origin: 0% 100%;
+            transform-origin: 100% 100%;
         }
 
         .loading-text {
@@ -213,6 +214,7 @@
             background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 50%, #2a2f4a 100%);
             border-radius: 20px;
             transition: background 1s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 -2px 10px rgba(255,255,255,0.1);
         }
 
         .sunrise-container.daylight {
@@ -399,6 +401,9 @@
             max-width: 360px;
             height: 380px;
             margin: 0 auto 30px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 20px;
         }
 
         .heart-canvas {
@@ -530,10 +535,14 @@
             backdrop-filter: blur(20px);
             border-radius: 24px;
             border: 2px solid rgba(255,255,255,0.25);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
             cursor: grab;
             user-select: none;
+        }
+
+        .layer:hover {
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.4);
         }
 
         .layer:active {
@@ -553,13 +562,13 @@
         }
 
         .final-message {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 30px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 35px;
             padding: 60px 40px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2);
             position: relative;
             min-height: 300px;
             display: flex;
@@ -594,7 +603,10 @@
             letter-spacing: 4px;
             margin-bottom: 24px;
             position: relative;
-            display: inline-block;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
             z-index: 1;
             text-shadow: 0 4px 30px rgba(0,0,0,0.4);
         }
@@ -829,7 +841,8 @@
                 max-width: 90%;
             }
             .reveal-text {
-                font-size: 38px;
+                font-size: 32px;
+                gap: 4px;
             }
             .subtitle {
                 font-size: 16px;
@@ -966,36 +979,44 @@
             if (!audioUnlocked) return;
             
             musicGainNode = audioContext.createGain();
-            musicGainNode.gain.setValueAtTime(0.02, audioContext.currentTime);
+            musicGainNode.gain.setValueAtTime(0.015, audioContext.currentTime);
             musicGainNode.connect(audioContext.destination);
 
             const melody = [
-                { freq: 523.25, duration: 2 },
-                { freq: 587.33, duration: 2 },
-                { freq: 659.25, duration: 2 },
-                { freq: 698.46, duration: 2 },
-                { freq: 783.99, duration: 2 },
-                { freq: 698.46, duration: 2 },
-                { freq: 659.25, duration: 2 },
-                { freq: 587.33, duration: 2 }
+                { freq: 523.25, duration: 1.5 },
+                { freq: 587.33, duration: 1.5 },
+                { freq: 659.25, duration: 1.5 },
+                { freq: 698.46, duration: 1.5 },
+                { freq: 783.99, duration: 1.5 },
+                { freq: 698.46, duration: 1.5 },
+                { freq: 659.25, duration: 1.5 },
+                { freq: 587.33, duration: 1.5 }
             ];
 
-            let currentTime = audioContext.currentTime;
             const loopMusic = () => {
                 if (!musicPlaying) return;
                 
+                let startTime = audioContext.currentTime;
                 melody.forEach((note, index) => {
                     const osc = audioContext.createOscillator();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(note.freq, currentTime + index * note.duration);
-                    osc.connect(musicGainNode);
-                    osc.start(currentTime + index * note.duration);
-                    osc.stop(currentTime + (index + 1) * note.duration);
+                    const gain = audioContext.createGain();
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(note.freq, startTime + index * note.duration);
+                    
+                    gain.gain.setValueAtTime(0.015, startTime + index * note.duration);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + (index + 1) * note.duration);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    osc.start(startTime + index * note.duration);
+                    osc.stop(startTime + (index + 1) * note.duration);
+                    
                     musicOscillators.push(osc);
                 });
 
-                currentTime += melody.length * 2;
-                setTimeout(loopMusic, melody.length * 2000);
+                setTimeout(loopMusic, melody.length * 1500);
             };
 
             loopMusic();
@@ -1563,29 +1584,55 @@
 
         function animateName() {
             const nameText = document.getElementById('nameText');
-            const text = 'Günaydınnnn Ayşe';
             nameText.innerHTML = '';
             
-            text.split('').forEach((char, index) => {
+            const line1 = document.createElement('div');
+            const line2 = document.createElement('div');
+            
+            'Günaydınnnn'.split('').forEach((char, index) => {
                 const span = document.createElement('span');
                 span.className = 'letter';
                 span.textContent = char;
                 span.style.animationDelay = (index * 0.08) + 's';
-                nameText.appendChild(span);
+                line1.appendChild(span);
             });
             
+            'Ayşe'.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.className = 'letter';
+                span.textContent = char;
+                span.style.animationDelay = ((11 + index) * 0.08) + 's';
+                line2.appendChild(span);
+            });
+            
+            nameText.appendChild(line1);
+            nameText.appendChild(line2);
+            
             const revealText = document.getElementById('revealText');
-            for (let i = 0; i < 8; i++) {
+            const heartPositions = [
+                { left: -60, top: -20 },
+                { left: 60, top: -20 },
+                { left: -70, top: 30 },
+                { left: 70, top: 30 },
+                { left: -40, top: 80 },
+                { left: 40, top: 80 },
+                { left: 0, top: -40 },
+                { left: 0, top: 100 },
+                { left: -50, top: 5 },
+                { left: 50, top: 5 }
+            ];
+            
+            heartPositions.forEach((pos, i) => {
                 setTimeout(() => {
                     const heart = document.createElement('div');
                     heart.className = 'floating-heart-decoration';
-                    heart.textContent = ['💕', '💖', '💗', '💓', '💝', '💞', '💕', '💖'][i];
-                    heart.style.left = (Math.random() * 100 - 50) + 'px';
-                    heart.style.top = (Math.random() * 80 - 40) + 'px';
+                    heart.textContent = ['💕', '💖', '💗', '💓', '💝', '💞', '💕', '💖', '💗', '💓'][i];
+                    heart.style.left = pos.left + 'px';
+                    heart.style.top = pos.top + 'px';
                     heart.style.animationDelay = (Math.random() * 2) + 's';
                     revealText.appendChild(heart);
-                }, i * 150);
-            }
+                }, i * 120);
+            });
         }
     </script>
 </body>
