@@ -28,8 +28,8 @@
 
         .loading-heart-container {
             position: relative;
-            width: 120px;
-            height: 120px;
+            width: 70px;
+            height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -38,35 +38,35 @@
         .loading-heart-svg {
             width: 100%;
             height: 100%;
-            animation: heartPulse 1.2s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px rgba(255,23,68,0.9));
+            animation: heartPulse 1.4s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(255,107,157,0.6));
         }
 
         .loading-heart-svg path {
-            fill: #ff1744;
+            fill: #ff6b9d;
         }
 
         .loading-ring {
             position: absolute;
-            width: 150px;
-            height: 150px;
-            border: 3px solid transparent;
-            border-top-color: #ff6b9d;
+            width: 90px;
+            height: 90px;
+            border: 2px solid transparent;
+            border-top-color: rgba(255,255,255,0.4);
             border-radius: 50%;
-            animation: spinRing 1.5s linear infinite;
+            animation: spinRing 2s linear infinite;
         }
 
         .loading-ring:nth-child(2) {
-            width: 170px;
-            height: 170px;
-            border-top-color: #ffc0cb;
-            animation-duration: 2s;
+            width: 105px;
+            height: 105px;
+            border-top-color: rgba(255,192,203,0.3);
+            animation-duration: 2.5s;
             animation-direction: reverse;
         }
 
         @keyframes heartPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+            50% { transform: scale(1.08); }
         }
 
         @keyframes spinRing {
@@ -75,30 +75,23 @@
         }
 
         .loading-text {
-            color: white;
-            font-size: 24px;
-            margin-top: 40px;
-            font-weight: 500;
-            letter-spacing: 4px;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            animation: textGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes textGlow {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; text-shadow: 0 4px 30px rgba(255,255,255,0.3); }
+            color: rgba(255,255,255,0.9);
+            font-size: 18px;
+            margin-top: 30px;
+            font-weight: 400;
+            letter-spacing: 3px;
         }
 
         .loading-dots {
             display: flex;
-            gap: 8px;
-            margin-top: 20px;
+            gap: 6px;
+            margin-top: 15px;
         }
 
         .loading-dot {
-            width: 10px;
-            height: 10px;
-            background: white;
+            width: 6px;
+            height: 6px;
+            background: rgba(255,255,255,0.7);
             border-radius: 50%;
             animation: dotBounce 1.4s ease-in-out infinite;
         }
@@ -107,7 +100,7 @@
         .loading-dot:nth-child(3) { animation-delay: 0.4s; }
 
         @keyframes dotBounce {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.4; }
             40% { transform: scale(1); opacity: 1; }
         }
 
@@ -448,13 +441,18 @@
         }
 
         .hint {
-            color: rgba(255,255,255,0.95) !important;
-            font-size: 18px;
-            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.9) !important;
+            font-size: 16px;
+            letter-spacing: 1px;
             transition: all 0.5s ease;
-            text-shadow: 0 3px 15px rgba(0,0,0,0.4);
-            font-weight: 400;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            font-weight: 300;
             min-height: 25px;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            margin-top: 15px;
         }
 
         .hint.pulse {
@@ -468,17 +466,22 @@
 
         .congratulations {
             position: absolute;
-            bottom: 20px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            color: #ff1744 !important;
-            font-size: 20px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-shadow: 0 3px 20px rgba(255,23,68,0.8);
+            color: #fff !important;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 15px rgba(255,107,157,0.6);
             opacity: 0;
             transition: all 0.5s ease;
             pointer-events: none;
+            background: linear-gradient(135deg, rgba(255,107,157,0.3), rgba(255,23,68,0.2));
+            padding: 12px 24px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .congratulations.show {
@@ -646,11 +649,11 @@
         }
 
         .layer-text {
-            font-size: 32px;
+            font-size: 26px;
             color: #fff !important;
-            font-weight: 400;
-            letter-spacing: 2.5px;
-            text-shadow: 0 3px 25px rgba(0,0,0,0.4);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
         }
 
         #stage4 {
@@ -658,21 +661,21 @@
         }
 
         .final-message {
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(25px);
-            border: 2px solid rgba(255,255,255,0.25);
-            border-radius: 35px;
-            padding: 60px 40px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 30px;
+            padding: 50px 35px;
             text-align: center;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
             position: relative;
-            min-height: 300px;
+            min-height: 280px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
             margin: 0 auto;
         }
 
@@ -693,18 +696,18 @@
         }
 
         .reveal-text {
-            font-size: 60px;
-            font-weight: 700;
+            font-size: 48px;
+            font-weight: 600;
             color: #fff !important;
-            letter-spacing: 5px;
-            margin-bottom: 24px;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             z-index: 2;
-            text-shadow: 0 5px 35px rgba(0,0,0,0.5);
+            text-shadow: 0 4px 25px rgba(0,0,0,0.4);
         }
 
         .reveal-text .letter {
@@ -815,9 +818,9 @@
         }
 
         .subtitle {
-            font-size: 22px;
-            color: rgba(255,255,255,0.95) !important;
-            font-weight: 400;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7) !important;
+            font-weight: 300;
             letter-spacing: 2.5px;
             animation: fadeInUp 0.8s ease 0.2s backwards;
             position: relative;
@@ -1076,6 +1079,9 @@
         let musicPlaying = false;
         const bgMusicElement = document.getElementById('bgMusic');
         bgMusicElement.volume = 0.4;
+        
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioUnlocked = false;
 
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -1108,6 +1114,42 @@
                     musicPlaying = true;
                 }).catch(e => console.log('Audio play failed:', e));
             }
+        }
+        
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            try {
+                const oscillator = audioContext.createOscillator();
+                oscillator.connect(audioContext.destination);
+                oscillator.start(0);
+                oscillator.stop(0);
+                audioUnlocked = true;
+            } catch(e) {}
+        }
+        
+        function playTone(frequency, duration, type = 'sine') {
+            if (!audioUnlocked) return;
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.type = type;
+                oscillator.frequency.value = frequency;
+                gainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch(e) {}
+        }
+        
+        function playMelody(notes) {
+            if (!audioUnlocked) return;
+            notes.forEach((note) => {
+                setTimeout(() => {
+                    playTone(note.freq, note.duration, note.type || 'sine');
+                }, note.delay);
+            });
         }
         
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
