@@ -26,56 +26,89 @@
             visibility: hidden;
         }
 
-        .heart-loader {
-            font-size: 80px;
-            animation: heartBeat 1s ease-in-out infinite;
-            filter: drop-shadow(0 0 40px rgba(255,23,68,0.8));
+        .loading-heart-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes heartBeat {
+        .loading-heart-svg {
+            width: 100%;
+            height: 100%;
+            animation: heartPulse 1.2s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(255,23,68,0.9));
+        }
+
+        .loading-heart-svg path {
+            fill: #ff1744;
+        }
+
+        .loading-ring {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 3px solid transparent;
+            border-top-color: #ff6b9d;
+            border-radius: 50%;
+            animation: spinRing 1.5s linear infinite;
+        }
+
+        .loading-ring:nth-child(2) {
+            width: 170px;
+            height: 170px;
+            border-top-color: #ffc0cb;
+            animation-duration: 2s;
+            animation-direction: reverse;
+        }
+
+        @keyframes heartPulse {
             0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.15); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.2); }
+            50% { transform: scale(1.15); }
+        }
+
+        @keyframes spinRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .loading-text {
             color: white;
-            font-size: 28px;
-            margin-top: 50px;
-            font-weight: 400;
-            letter-spacing: 3px;
-            text-shadow: 0 3px 15px rgba(0,0,0,0.4);
+            font-size: 24px;
+            margin-top: 40px;
+            font-weight: 500;
+            letter-spacing: 4px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            animation: textGlow 2s ease-in-out infinite;
         }
 
-        .progress-bar {
-            width: 250px;
-            height: 6px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 20px;
-            margin-top: 30px;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.3);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2);
+        @keyframes textGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 4px 30px rgba(255,255,255,0.3); }
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff1744 0%, #ff6b9d 25%, #ffc0cb 50%, #ff6b9d 75%, #ff1744 100%);
-            background-size: 200% 100%;
-            animation: progressFill 2s cubic-bezier(0.4, 0, 0.2, 1) forwards, shimmer 2s linear infinite;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(255,23,68,1), inset 0 1px 2px rgba(255,255,255,0.5);
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
         }
 
-        @keyframes progressFill {
-            from { width: 0%; }
-            to { width: 100%; }
+        .loading-dot {
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            animation: dotBounce 1.4s ease-in-out infinite;
         }
 
-        @keyframes shimmer {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 200% 0%; }
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dotBounce {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
         }
 
         .music-toggle {
@@ -196,13 +229,14 @@
 
         .birds {
             position: absolute;
-            top: 0;
+            top: 20px;
             left: 0;
             right: 0;
-            bottom: 0;
+            height: 120px;
             opacity: 0;
-            transition: opacity 1s ease;
+            transition: opacity 1.5s ease;
             pointer-events: none;
+            overflow: hidden;
         }
 
         .birds.visible {
@@ -211,14 +245,28 @@
 
         .bird {
             position: absolute;
-            font-size: 18px;
-            animation: flyBird 8s linear infinite;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .bird.flying {
+            animation: flyBird var(--fly-duration) linear infinite;
         }
 
         @keyframes flyBird {
-            0% { transform: translate(-50px, 0) scale(0.8); }
-            50% { transform: translate(calc(50vw), -30px) scale(1); }
-            100% { transform: translate(calc(100% + 100px), -10px) scale(0.8); }
+            0% { 
+                transform: translateX(-30px) translateY(0) scaleX(1);
+                opacity: 0;
+            }
+            10% { opacity: 0.9; }
+            50% { 
+                transform: translateX(50%) translateY(-15px) scaleX(1);
+            }
+            90% { opacity: 0.9; }
+            100% { 
+                transform: translateX(calc(100vw + 30px)) translateY(5px) scaleX(1);
+                opacity: 0;
+            }
         }
 
         .grass-container {
@@ -226,29 +274,31 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 60px;
+            height: 50px;
             opacity: 0;
-            transition: opacity 1.2s ease;
+            transition: opacity 1s ease 0.5s;
             pointer-events: none;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 0 10px;
         }
 
         .grass-container.visible {
             opacity: 1;
         }
 
-        .grass {
-            position: absolute;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(to top, #2d5016, #4a7c2c);
+        .grass-blade {
+            width: 4px;
+            background: linear-gradient(to top, #228B22, #32CD32);
             border-radius: 2px 2px 0 0;
-            animation: growGrass 0.8s ease-out forwards;
-            transform-origin: bottom;
+            transform-origin: bottom center;
+            animation: swayGrass 2s ease-in-out infinite;
         }
 
-        @keyframes growGrass {
-            from { height: 0; }
-            to { height: var(--grass-height); }
+        @keyframes swayGrass {
+            0%, 100% { transform: rotate(-3deg) scaleY(1); }
+            50% { transform: rotate(3deg) scaleY(1.05); }
         }
 
         .sunrise-container.daylight {
@@ -923,10 +973,18 @@
     </audio>
     
     <div class="loading-screen" id="loadingScreen">
-        <div class="loading-heart">❤️</div>
-        <div class="loading-text">Hazırlanıyor...</div>
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
+        <div class="loading-heart-container">
+            <div class="loading-ring"></div>
+            <div class="loading-ring"></div>
+            <svg class="loading-heart-svg" viewBox="0 0 32 29.6">
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+            </svg>
+        </div>
+        <div class="loading-text">Hazırlanıyor</div>
+        <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
         </div>
     </div>
 
@@ -976,8 +1034,8 @@
                     <div id="heartDots"></div>
                 </div>
             </div>
-            <div class="hint">Noktaları sırayla birleştir ve kalbi tamamla</div>
-            <div class="congratulations" id="heartCongrats">Tebrikler kalbimi tamamladın ❤️</div>
+            <div class="hint" id="stage2Hint">Noktaları sırayla birleştir ve kalbi tamamla</div>
+            <div class="congratulations" id="heartCongrats">Tebrikler, kalbimi tamamladın! ❤️</div>
         </div>
 
         <div class="stage" id="stage3">
@@ -1015,11 +1073,9 @@
 
     <script>
         let currentStage = 1;
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let audioUnlocked = false;
         let musicPlaying = false;
-        let musicGainNode = null;
-        let musicOscillators = [];
+        const bgMusicElement = document.getElementById('bgMusic');
+        bgMusicElement.volume = 0.4;
 
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -1027,15 +1083,19 @@
                 setTimeout(() => {
                     document.getElementById('loadingScreen').remove();
                 }, 500);
-                bgMusicElement.play().catch(e => {
-                    console.log('Autoplay blocked, waiting for user interaction');
-                });
-                musicPlaying = true;
-            }, 3000);
+            }, 2500);
         });
 
-        const bgMusicElement = document.getElementById('bgMusic');
         document.getElementById('musicToggle').addEventListener('click', toggleMusic);
+        
+        document.body.addEventListener('click', () => {
+            if (!musicPlaying) {
+                bgMusicElement.play().then(() => {
+                    musicPlaying = true;
+                    document.getElementById('musicToggle').textContent = '🔊';
+                }).catch(e => {});
+            }
+        }, { once: true });
 
         function toggleMusic() {
             if (musicPlaying) {
@@ -1043,150 +1103,11 @@
                 document.getElementById('musicToggle').textContent = '🔇';
                 musicPlaying = false;
             } else {
-                bgMusicElement.play().catch(e => console.log('Audio play failed:', e));
-                document.getElementById('musicToggle').textContent = '�';
-                musicPlaying = true;
+                bgMusicElement.play().then(() => {
+                    document.getElementById('musicToggle').textContent = '🔊';
+                    musicPlaying = true;
+                }).catch(e => console.log('Audio play failed:', e));
             }
-        }
-
-        function startMusic() {
-            if (!audioUnlocked) return;
-            
-            const melody = [
-                { freq: 523.25, duration: 0.8 },
-                { freq: 659.25, duration: 0.8 },
-                { freq: 783.99, duration: 0.8 },
-                { freq: 880.00, duration: 0.8 },
-                { freq: 783.99, duration: 0.8 },
-                { freq: 659.25, duration: 0.8 },
-                { freq: 587.33, duration: 0.8 },
-                { freq: 523.25, duration: 0.8 },
-                { freq: 659.25, duration: 0.8 },
-                { freq: 783.99, duration: 0.8 },
-                { freq: 1046.50, duration: 0.8 },
-                { freq: 880.00, duration: 1.2 }
-            ];
-
-            const loopMusic = () => {
-                if (!musicPlaying) return;
-                
-                let startTime = audioContext.currentTime;
-                melody.forEach((note, index) => {
-                    const osc1 = audioContext.createOscillator();
-                    const osc2 = audioContext.createOscillator();
-                    const gain = audioContext.createGain();
-                    
-                    osc1.type = 'sine';
-                    osc2.type = 'sine';
-                    osc1.frequency.setValueAtTime(note.freq, startTime + index * note.duration);
-                    osc2.frequency.setValueAtTime(note.freq * 2, startTime + index * note.duration);
-                    
-                    gain.gain.setValueAtTime(0.01, startTime + index * note.duration);
-                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + (index + 1) * note.duration);
-                    
-                    osc1.connect(gain);
-                    osc2.connect(gain);
-                    gain.connect(audioContext.destination);
-                    
-                    osc1.start(startTime + index * note.duration);
-                    osc2.start(startTime + index * note.duration);
-                    osc1.stop(startTime + (index + 1) * note.duration);
-                    osc2.stop(startTime + (index + 1) * note.duration);
-                    
-                    musicOscillators.push(osc1, osc2);
-                });
-
-                const totalDuration = melody.reduce((sum, note) => sum + note.duration, 0);
-                setTimeout(loopMusic, totalDuration * 1000);
-            };
-
-            loopMusic();
-        }
-
-        function stopMusic() {
-            musicOscillators.forEach(osc => {
-                try { osc.stop(); } catch(e) {}
-            });
-            musicOscillators = [];
-            if (musicGainNode) {
-                musicGainNode.disconnect();
-                musicGainNode = null;
-            }
-        }
-
-        function playTone(frequency, duration, type = 'sine') {
-            if (!audioUnlocked) return;
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.type = type;
-            oscillator.frequency.value = frequency;
-            
-            gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
-        }
-
-        function playMelody(notes) {
-            if (!audioUnlocked) return;
-            notes.forEach((note, index) => {
-                setTimeout(() => {
-                    playTone(note.freq, note.duration, note.type || 'sine');
-                }, note.delay);
-            });
-        }
-
-        function createParticleExplosion(x, y) {
-            const colors = ['#ff1744', '#ff6b9d', '#ff1a75', '#ffc0cb', '#ff69b4'];
-            const emojis = ['❤️', '💕', '💖', '💗', '💓', '💝'];
-            const container = document.getElementById('heartCanvas');
-            
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'explosion-particle';
-                
-                const useEmoji = Math.random() > 0.5;
-                if (useEmoji) {
-                    particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                    particle.style.fontSize = (Math.random() * 20 + 15) + 'px';
-                } else {
-                    particle.style.width = (Math.random() * 8 + 4) + 'px';
-                    particle.style.height = particle.style.width;
-                    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    particle.style.borderRadius = '50%';
-                }
-                
-                particle.style.left = x + 'px';
-                particle.style.top = y + 'px';
-                particle.style.position = 'absolute';
-                
-                const angle = (Math.PI * 2 * i) / 30;
-                const velocity = Math.random() * 100 + 50;
-                const tx = Math.cos(angle) * velocity;
-                const ty = Math.sin(angle) * velocity;
-                
-                particle.style.setProperty('--tx', tx + 'px');
-                particle.style.setProperty('--ty', ty + 'px');
-                particle.style.animation = `explode ${Math.random() * 0.5 + 0.8}s ease-out forwards`;
-                
-                container.appendChild(particle);
-                
-                setTimeout(() => particle.remove(), 1500);
-            }
-        }
-
-        function unlockAudio() {
-            if (audioUnlocked) return;
-            const oscillator = audioContext.createOscillator();
-            oscillator.connect(audioContext.destination);
-            oscillator.start(0);
-            oscillator.stop(0);
-            audioUnlocked = true;
         }
         
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -1433,6 +1354,7 @@
             }, 400);
             
             setTimeout(() => {
+                document.querySelector('#stage2Hint').style.display = 'none';
                 document.getElementById('heartCongrats').classList.add('show');
             }, 800);
             
@@ -1583,11 +1505,10 @@
                 createBirds();
                 createGrass();
                 
-                playTone(800, 0.5, 'triangle');
                 setTimeout(() => {
                     sun.style.transition = '';
                     moveToStage(2);
-                }, 800);
+                }, 1500);
             } else {
                 sun.style.bottom = '20px';
                 sun.style.transform = 'translateX(-50%) scale(1)';
@@ -1713,28 +1634,34 @@
 
         function createBirds() {
             const birdsContainer = document.getElementById('birds');
-            const birdEmojis = ['🕊️', '🐦', '🦅'];
+            birdsContainer.innerHTML = '';
             
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 3; i++) {
                 const bird = document.createElement('div');
                 bird.className = 'bird';
-                bird.textContent = birdEmojis[Math.floor(Math.random() * birdEmojis.length)];
-                bird.style.top = (20 + Math.random() * 100) + 'px';
-                bird.style.animationDelay = (i * 1.5) + 's';
-                bird.style.animationDuration = (6 + Math.random() * 4) + 's';
+                bird.textContent = '🐦';
+                bird.style.top = (15 + i * 35) + 'px';
+                bird.style.left = '-30px';
+                bird.style.setProperty('--fly-duration', (8 + i * 2) + 's');
+                
+                setTimeout(() => {
+                    bird.classList.add('flying');
+                }, i * 800);
+                
                 birdsContainer.appendChild(bird);
             }
         }
 
         function createGrass() {
             const grassContainer = document.getElementById('grassContainer');
+            grassContainer.innerHTML = '';
             
-            for (let i = 0; i < 80; i++) {
+            for (let i = 0; i < 25; i++) {
                 const grass = document.createElement('div');
-                grass.className = 'grass';
-                grass.style.left = (Math.random() * 100) + '%';
-                grass.style.setProperty('--grass-height', (15 + Math.random() * 25) + 'px');
-                grass.style.animationDelay = (Math.random() * 1.2) + 's';
+                grass.className = 'grass-blade';
+                const height = 15 + Math.random() * 20;
+                grass.style.height = height + 'px';
+                grass.style.animationDelay = (Math.random() * 2) + 's';
                 grassContainer.appendChild(grass);
             }
         }
