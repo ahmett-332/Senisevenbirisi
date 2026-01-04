@@ -2,865 +2,30 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="color-scheme" content="light only">
-    <title>...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Sana Özel Bir Şey ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        #loadingScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #ec4899 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        #loadingScreen.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loading-heart-container {
-            position: relative;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading-heart-svg {
-            width: 100%;
-            height: 100%;
-            animation: heartPulse 1.4s ease-in-out infinite;
-            filter: drop-shadow(0 0 15px rgba(255,107,157,0.6));
-        }
-
-        .loading-heart-svg path {
-            fill: #ff6b9d;
-        }
-
-        .loading-ring {
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            border: 2px solid transparent;
-            border-top-color: rgba(255,255,255,0.4);
-            border-radius: 50%;
-            animation: spinRing 2s linear infinite;
-        }
-
-        .loading-ring:nth-child(2) {
-            width: 105px;
-            height: 105px;
-            border-top-color: rgba(255,192,203,0.3);
-            animation-duration: 2.5s;
-            animation-direction: reverse;
-        }
-
-        @keyframes heartPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
-
-        @keyframes spinRing {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: rgba(255,255,255,0.9);
-            font-size: 18px;
-            margin-top: 30px;
-            font-weight: 400;
-            letter-spacing: 3px;
-        }
-
-        .loading-dots {
-            display: flex;
-            gap: 6px;
-            margin-top: 15px;
-        }
-
-        .loading-dot {
-            width: 6px;
-            height: 6px;
-            background: rgba(255,255,255,0.7);
-            border-radius: 50%;
-            animation: dotBounce 1.4s ease-in-out infinite;
-        }
-
-        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
-        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes dotBounce {
-            0%, 80%, 100% { transform: scale(0.8); opacity: 0.4; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-
-        .music-toggle {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            font-size: 24px;
-            user-select: none;
-        }
-
-        .music-toggle:hover {
-            background: rgba(255,255,255,0.25);
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255,255,255,0.3);
-        }
-
-        .music-toggle:active {
-            transform: scale(0.95);
-        }
-
-        @media (max-width: 480px) {
-            .music-toggle {
-                width: 50px;
-                height: 50px;
-                bottom: 20px;
-                right: 20px;
-                font-size: 20px;
-            }
-        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html {
-            color-scheme: light only;
-            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(180deg, #2d1b4e 0%, #4c2889 25%, #7c3aed 50%, #a855f7 75%, #d946ef 100%);
-            background-size: 100% 100%;
-            background-attachment: fixed;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #fff;
             overflow: hidden;
             position: relative;
-            color-scheme: light only;
-            -webkit-text-size-adjust: 100%;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                animation: gradientShift 20s ease infinite;
-            }
-        }
-
-        .container {
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
-            position: relative;
-        }
-
-        .stage {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.6s ease;
-        }
-
-        .stage.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        #stage1 {
-            text-align: center;
-        }
-
-        .sunrise-container {
-            position: relative;
-            width: 100%;
-            height: 450px;
-            margin: 0 auto 40px;
-            overflow: hidden;
-            background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 40%, #2a2f4a 80%, #3a3f5a 100%);
-            border-radius: 24px;
-            transition: background 1.5s ease;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.4), inset 0 -3px 15px rgba(255,255,255,0.1);
-        }
-
-        .birds {
-            position: absolute;
-            top: 20px;
-            left: 0;
-            right: 0;
-            height: 120px;
-            opacity: 0;
-            transition: opacity 1.5s ease;
-            pointer-events: none;
-            overflow: visible;
-            z-index: 10;
-        }
-
-        .birds.visible {
-            opacity: 1;
-        }
-
-        .bird {
-            position: absolute;
-            font-size: 18px;
-            left: -50px;
-        }
-
-        .bird.flying {
-            animation: flyBird var(--fly-duration) linear infinite;
-        }
-
-        @keyframes flyBird {
-            0% { 
-                transform: translateX(-50px) translateY(0);
-            }
-            25% { 
-                transform: translateX(25vw) translateY(-10px);
-            }
-            50% { 
-                transform: translateX(50vw) translateY(5px);
-            }
-            75% { 
-                transform: translateX(75vw) translateY(-5px);
-            }
-            100% { 
-                transform: translateX(calc(100vw + 50px)) translateY(0);
-            }
-        }
-
-        .grass-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 50px;
-            opacity: 0;
-            transition: opacity 1s ease 0.5s;
-            pointer-events: none;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            padding: 0 10px;
-        }
-
-        .grass-container.visible {
-            opacity: 1;
-        }
-
-        .grass-blade {
-            width: 4px;
-            background: linear-gradient(to top, #228B22, #32CD32);
-            border-radius: 2px 2px 0 0;
-            transform-origin: bottom center;
-            animation: swayGrass 2s ease-in-out infinite;
-        }
-
-        @keyframes swayGrass {
-            0%, 100% { transform: rotate(-3deg) scaleY(1); }
-            50% { transform: rotate(3deg) scaleY(1.05); }
-        }
-
-        .sunrise-container.daylight {
-            background: linear-gradient(to bottom, #87ceeb 0%, #b0d4f1 20%, #ffd4a3 40%, #ffa07a 60%, #ffb6c1 80%, #ffc0cb 100%);
-        }
-
-        .horizon {
-            position: absolute;
-            bottom: 80px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: rgba(255,255,255,0.3);
-        }
-
-        .sun {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle at 30% 30%, #fff59d, #ffd700 40%, #ff8c00);
-            border-radius: 50%;
-            cursor: grab;
-            box-shadow: 0 0 50px rgba(255,215,0,0.7), 0 0 100px rgba(255,215,0,0.3);
-            transition: box-shadow 0.3s ease;
-            max-width: calc(100% - 40px);
-        }
-
-        .sun::before {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: 10%;
-            width: 30%;
-            height: 30%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8), transparent);
-            border-radius: 50%;
-        }
-
-        .sun:active {
-            cursor: grabbing;
-        }
-
-        .sun.rising {
-            box-shadow: 0 0 80px rgba(255,215,0,1), 0 0 150px rgba(255,215,0,0.5);
-        }
-
-        .sky-gradient {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, rgba(255,200,100,0.3) 0%, rgba(255,150,100,0.2) 50%, rgba(255,200,150,0.1) 100%);
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .sky-gradient.visible {
-            opacity: 1;
-        }
-
-        .moon {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle at 30% 30%, #fff, #e0e0e0);
-            border-radius: 50%;
-            box-shadow: 0 0 30px rgba(255,255,255,0.5);
-            transition: opacity 1s ease, transform 1s ease;
-        }
-
-        .moon.hidden {
-            opacity: 0;
-            transform: translateY(-50px);
-        }
-
-        .stars-night {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            transition: opacity 1s ease;
-        }
-
-        .stars-night.hidden {
-            opacity: 0;
-        }
-
-        .star-small {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #fff !important;
-            background-color: #fff !important;
-            border-radius: 50%;
-            box-shadow: 0 0 4px #fff, 0 0 6px rgba(255,255,255,0.6);
-            animation: twinkle 2s ease-in-out infinite;
-            will-change: opacity, transform;
-        }
-
-        .clouds {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .clouds.visible {
-            opacity: 0.6;
-        }
-
-        .cloud {
-            position: absolute;
-            background: rgba(255,255,255,0.8);
-            border-radius: 100px;
-            animation: floatCloud 20s linear infinite;
-        }
-
-        .cloud::before,
-        .cloud::after {
-            content: '';
-            position: absolute;
-            background: rgba(255,255,255,0.8);
-            border-radius: 100px;
-        }
-
-        @keyframes floatCloud {
-            from { transform: translate3d(-100px, 0, 0); }
-            to { transform: translate3d(calc(100% + 500px), 0, 0); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        .hint {
-            color: rgba(255,255,255,0.9) !important;
-            font-size: 16px;
-            letter-spacing: 1px;
-            transition: all 0.5s ease;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            font-weight: 300;
-            min-height: 25px;
-            padding: 12px 20px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            margin-top: 15px;
-        }
-
-        .hint.pulse {
-            animation: hintPulse 0.6s ease;
-        }
-
-        @keyframes hintPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); color: #ffc0cb !important; }
-        }
-
-        .congratulations {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            color: #fff !important;
-            font-size: 18px;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 15px rgba(255,107,157,0.6);
-            opacity: 0;
-            transition: all 0.5s ease;
-            pointer-events: none;
-            background: linear-gradient(135deg, rgba(255,107,157,0.3), rgba(255,23,68,0.2));
-            padding: 12px 24px;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .congratulations.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        #stage2 {
-            text-align: center;
-        }
-
-        .heart-container {
-            position: relative;
-            width: 90%;
-            max-width: 360px;
-            height: 380px;
-            margin: 0 auto 30px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 20px;
-            padding: 20px;
-        }
-
-        .heart-canvas {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 320px;
-            height: 90%;
-            max-height: 320px;
-        }
-
-        .heart-dot {
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            background: rgba(255,255,255,0.7) !important;
-            border: 3px solid rgba(255,255,255,0.95) !important;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            z-index: 10;
-            will-change: transform;
-        }
-
-        .heart-dot:hover {
-            background: rgba(255,255,255,0.9);
-            transform: scale(1.2);
-        }
-
-        .heart-dot.active {
-            background: #ff1a75 !important;
-            border-color: #ff1a75 !important;
-            box-shadow: 0 0 20px rgba(255,26,117,1) !important;
-            transform: scale(1.4);
-        }
-
-        .heart-dot.completed {
-            background: #ff1744 !important;
-            border-color: #ff1744 !important;
-            box-shadow: 0 0 25px rgba(255,23,68,1) !important;
-            transform: scale(1.2);
-        }
-
-        .heart-dot.next-available {
-            background: rgba(255,182,193,0.8) !important;
-            border-color: rgba(255,182,193,1) !important;
-            box-shadow: 0 0 10px rgba(255,182,193,0.6) !important;
-            animation: pulse 1s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.15); opacity: 0.85; }
-        }
-
-        .explosion-particle {
-            position: absolute;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        @keyframes explode {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--tx), var(--ty)) scale(0);
-                opacity: 0;
-            }
-        }
-
-        .heart-path {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .heart-path svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .heart-fill-path {
-            fill: #ff1744;
-            transform-origin: center;
-            filter: drop-shadow(0 0 20px rgba(255, 23, 68, 0.8));
-        }
-
-        @keyframes heartBeatAnim {
-            0%, 100% { transform: scale(1); }
-            15% { transform: scale(1.1); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.08); }
-            60% { transform: scale(1); }
-        }
-
-        .heart-fill-path.beating {
-            animation: heartBeatAnim 1s ease-in-out infinite;
-            transform-origin: center;
-            opacity: 1 !important;
-            transform: scale(1) !important;
-        }
-
-
-        #stage3 {
-            text-align: center;
-        }
-
-        .layers-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            height: 300px;
-            margin: 0 auto 30px auto;
-            touch-action: pan-y;
-        }
-
-        .layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            border: 2px solid rgba(255,255,255,0.25);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
-            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-            cursor: grab;
-            user-select: none;
-        }
-
-        .layer:hover {
-            box-shadow: 0 12px 40px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.4);
-        }
-
-        .layer:active {
-            cursor: grabbing;
-        }
-
-        .layer-text {
-            font-size: 26px;
-            color: #fff !important;
-            font-weight: 300;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-        }
-
-        #stage4 {
-            text-align: center;
-        }
-
-        .final-message {
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 30px;
-            padding: 50px 35px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
-            position: relative;
-            min-height: 280px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .final-message::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .reveal-text {
-            font-size: 48px;
-            font-weight: 600;
-            color: #fff !important;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            z-index: 2;
-            text-shadow: 0 4px 25px rgba(0,0,0,0.4);
-        }
-
-        .reveal-text .letter {
-            display: inline-block;
-            opacity: 0;
-            animation: letterReveal 0.5s ease forwards;
-        }
-
-        @keyframes letterReveal {
-            0% {
-                opacity: 0;
-                transform: translateY(20px) rotate(-10deg);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) rotate(0deg);
-            }
-        }
-
-        .floating-heart-decoration {
-            position: absolute;
-            font-size: 24px;
-            animation: heartRain 4s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes heartRain {
-            0% { 
-                transform: translate(-50%, -50%) translateY(-80px) translateX(0) rotate(0deg) scale(0.5);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            50% { 
-                transform: translate(-50%, -50%) translateY(100px) translateX(var(--drift-x)) rotate(var(--rotate)) scale(1);
-                opacity: 1;
-            }
-            100% { 
-                transform: translate(-50%, -50%) translateY(280px) translateX(var(--drift-x)) rotate(var(--rotate)) scale(0.8);
-                opacity: 0;
-            }
-        }
-
-        .heart {
-            position: absolute;
-            font-size: 28px;
-            animation: floatHeart 2s ease-in-out infinite;
-            opacity: 1;
-            filter: drop-shadow(0 2px 8px rgba(255,0,0,0.3));
-        }
-
-        .heart:nth-child(1) {
-            top: -10px;
-            left: -30px;
-            animation-delay: 0s;
-        }
-
-        .heart:nth-child(2) {
-            top: -10px;
-            right: -30px;
-            animation-delay: 0.5s;
-        }
-
-        .heart:nth-child(3) {
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation-delay: 1s;
-        }
-
-        .heart:nth-child(4) {
-            top: 50%;
-            left: -40px;
-            animation-delay: 1.5s;
-        }
-
-        .heart:nth-child(5) {
-            top: 50%;
-            right: -40px;
-            animation-delay: 0.3s;
-        }
-
-        .heart:nth-child(6) {
-            top: 20px;
-            left: 10%;
-            animation-delay: 0.7s;
-        }
-
-        .heart:nth-child(7) {
-            top: 20px;
-            right: 10%;
-            animation-delay: 1.2s;
-        }
-
-        .heart:nth-child(8) {
-            bottom: 20px;
-            left: 20%;
-            animation-delay: 0.9s;
-        }
-
-        @keyframes floatHeart {
-            0%, 100% { opacity: 0; transform: translateY(0) scale(0.8) rotate(-10deg); }
-            25% { opacity: 0.8; transform: translateY(-8px) scale(1) rotate(5deg); }
-            50% { opacity: 1; transform: translateY(-18px) scale(1.15) rotate(10deg); }
-            75% { opacity: 0.8; transform: translateY(-8px) scale(1) rotate(-5deg); }
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: rgba(255,255,255,0.7) !important;
-            font-weight: 300;
-            letter-spacing: 2.5px;
-            animation: fadeInUp 0.8s ease 0.2s backwards;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 3px 20px rgba(0,0,0,0.4);
-            line-height: 1.6;
-        }
-
-        .love-note {
-            font-size: 15px;
-            color: rgba(255,255,255,0.85);
-            font-weight: 300;
-            letter-spacing: 1px;
-            margin-top: 15px;
-            animation: fadeInUp 0.8s ease 0.4s backwards;
-            position: relative;
-            z-index: 1;
-            font-style: italic;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        /* Starfield background */
         .stars {
             position: fixed;
             top: 0;
@@ -868,909 +33,1325 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
+            z-index: 0;
         }
 
         .star {
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #fff !important;
-            background-color: #fff !important;
+            background: #fff;
             border-radius: 50%;
-            animation: twinkle 3s ease-in-out infinite;
-            box-shadow: 0 0 3px #fff, 0 0 5px rgba(255,255,255,0.5);
-            will-change: opacity, transform;
+            animation: twinkle 3s infinite ease-in-out;
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.5); }
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #fff !important;
-            background-color: #fff !important;
+        /* Floating orbs - more premium */
+        .orb {
+            position: fixed;
             border-radius: 50%;
             pointer-events: none;
-            animation: float 4s ease-in-out infinite;
-            box-shadow: 0 0 2px #fff;
-            will-change: transform;
+            filter: blur(80px);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-20px) translateX(10px); }
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(233, 69, 96, 0.3) 0%, transparent 70%);
+            top: -200px;
+            right: -150px;
+            animation: orbFloat1 30s ease-in-out infinite;
         }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.25) 0%, transparent 70%);
+            bottom: -150px;
+            left: -100px;
+            animation: orbFloat2 35s ease-in-out infinite;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(240, 147, 251, 0.2) 0%, transparent 70%);
+            top: 40%;
+            left: 10%;
+            animation: orbFloat3 25s ease-in-out infinite;
+        }
+
+        .orb-4 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 200, 150, 0.2) 0%, transparent 70%);
+            top: 20%;
+            right: 10%;
+            animation: orbFloat1 28s ease-in-out infinite reverse;
+        }
+
+        @keyframes orbFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(50px, 40px) scale(1.05); }
+        }
+
+        @keyframes orbFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-50px, -40px) scale(1.1); }
+            66% { transform: translate(40px, 50px) scale(0.9); }
+        }
+
+        @keyframes orbFloat3 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(60px, -60px); }
+        }
+
+        /* Screen transitions */
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(40px) scale(0.95);
+            z-index: 1;
+        }
+
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .screen.fade-out {
+            opacity: 0;
+            transform: translateY(-40px) scale(0.95);
+        }
+
+        .text-container {
+            text-align: center;
+            max-width: 380px;
+        }
+
+        .main-text {
+            font-size: 1.4rem;
+            line-height: 2;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .intro-text {
+            font-size: 1.25rem;
+            line-height: 2.2;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 300;
+        }
+
+        .subtle-text {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2rem;
+            font-weight: 300;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        /* Premium Buttons */
+        .button-container {
+            margin-top: 2.5rem;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-family: inherit;
+            font-weight: 500;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            background: linear-gradient(135deg, #764ba2 0%, #f093fb 100%);
+        }
+
+        .btn-small {
+            padding: 0.85rem 1.8rem;
+            font-size: 0.95rem;
+        }
+
+        /* Progress dots */
+        .progress-dots {
+            position: fixed;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dot.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: scale(1.5);
+            box-shadow: 0 0 20px rgba(240, 147, 251, 0.6);
+        }
+
+        .dot.completed {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Quiz options - Premium */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .quiz-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.1rem 1.4rem;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            font-family: inherit;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+        }
+
+        .quiz-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(8px);
+            border-color: rgba(240, 147, 251, 0.4);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-btn .letter {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.3) 0%, rgba(245, 87, 108, 0.3) 100%);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Card - Premium glassmorphism */
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 28px;
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 340px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .card h3 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .card ul {
+            list-style: none;
+        }
+
+        .card li {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 0.9rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .card li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: #f093fb;
+            font-size: 0.7rem;
+        }
+
+        .card li:nth-child(1) { animation-delay: 0.2s; }
+        .card li:nth-child(2) { animation-delay: 0.35s; }
+        .card li:nth-child(3) { animation-delay: 0.5s; }
+        .card li:nth-child(4) { animation-delay: 0.65s; }
+        .card li:nth-child(5) { animation-delay: 0.8s; }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Special name reveal */
+        .special-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1.5rem 0;
+            animation: nameReveal 1.5s ease-out, glow 3s ease-in-out infinite;
+        }
+
+        @keyframes nameReveal {
+            0% { opacity: 0; transform: scale(0.5) translateY(30px); filter: blur(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 30px rgba(240, 147, 251, 0.4)); }
+            50% { filter: drop-shadow(0 0 50px rgba(240, 147, 251, 0.7)); }
+        }
+
+        .pre-reveal-text {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+        }
+
+        .post-reveal-text {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        /* Escape button - BIGGER messages */
+        .escape-btn-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 2rem;
+            min-height: 150px;
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .escape-btn {
+            position: absolute;
+            left: 55%;
+            top: 0;
+            transition: none !important;
+            z-index: 10;
+            touch-action: none;
+        }
+
+        .static-btn {
+            position: absolute;
+            left: 5%;
+            top: 0;
+            z-index: 5;
+        }
+
+        .escape-message {
+            margin-top: 5rem;
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            min-height: 2rem;
+            opacity: 0;
+            transform: translateY(10px) scale(0.9);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .escape-message.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Typing effect */
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.3em;
+            background: rgba(255, 255, 255, 0.7);
+            margin-left: 3px;
+            animation: blink 0.8s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Delayed button appearance */
+        .delayed-btn {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .delayed-btn.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Final reveal */
+        .final-container {
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .final-message {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.5s ease;
+        }
+
+        .final-reveal {
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .final-reveal.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .final-reveal .big-heart {
+            font-size: 6rem;
+            animation: heartBeat 1s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 40px rgba(255, 100, 150, 0.8));
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.15); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.2); }
+        }
+
+        .final-reveal .love-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-top: 1.5rem;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 2px 30px rgba(240, 147, 251, 0.5);
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            border-radius: 3px;
+            animation: confettiFall 4s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
             }
-            .sunrise-container {
-                height: 250px;
+            100% {
+                transform: translateY(100vh) rotate(1080deg);
+                opacity: 0;
             }
-            .sun {
-                width: 70px;
-                height: 70px;
-            }
-            .sleep-icon {
-                width: 80px;
-                height: 80px;
-            }
-            .reveal-text {
-                font-size: 38px;
-                letter-spacing: 2px;
-            }
-            .heart {
-                font-size: 20px;
-            }
-            .love-note {
-                font-size: 13px;
-                margin-top: 12px;
-            }
-            .sunrise-container {
-                height: 300px;
-            }
-            .sun {
-                width: 60px;
-                height: 60px;
-            }
-            .heart-container {
-                width: 95%;
-                height: 340px;
-            }
-            .heart-canvas {
-                width: 95%;
-                height: 95%;
-            }
-            .heart-dot {
-                width: 18px;
-                height: 18px;
-                border-width: 2px;
-            }
-            .heart-path svg {
-                overflow: visible;
-            }
-            .final-message {
-                padding: 40px 20px;
-                min-height: 280px;
-                max-width: 90%;
-            }
-            .reveal-text {
-                font-size: 38px;
-                gap: 6px;
-            }
-            .subtitle {
-                font-size: 18px;
-            }
-            .layer-text {
-                font-size: 26px;
-            }
-            .hint {
-                font-size: 16px;
-            }
-            .sunrise-container {
-                height: 380px;
-            }
+        }
+
+        /* Sparkle container */
+        .sparkle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .sparkle-container.show {
+            opacity: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            animation: sparkle 3s infinite;
+            box-shadow: 0 0 10px #f093fb, 0 0 20px #f093fb;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Reaction popup */
+        .reaction {
+            position: fixed;
+            font-size: 2.5rem;
+            pointer-events: none;
+            z-index: 1000;
+            animation: reactionFloat 2s ease-out forwards;
+        }
+
+        @keyframes reactionFloat {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
+        }
+
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-emoji {
+            font-size: 3rem;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .loading-bar-container {
+            width: 180px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            border-radius: 4px;
+            animation: loadingProgress 1.5s ease-out forwards;
+        }
+
+        @keyframes loadingProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <audio id="bgMusic" loop>
-        <source src="cinematic-ambient-feeling-ambient-piano-music-for-videos-7767.mp3" type="audio/mpeg">
+    <!-- Background Music -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="atmospheric-background-179503.mp3" type="audio/mpeg">
     </audio>
-    
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-heart-container">
-            <div class="loading-ring"></div>
-            <div class="loading-ring"></div>
-            <svg class="loading-heart-svg" viewBox="0 0 32 29.6">
-                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-            </svg>
-        </div>
-        <div class="loading-text">Hazırlanıyor</div>
-        <div class="loading-dots">
-            <div class="loading-dot"></div>
-            <div class="loading-dot"></div>
-            <div class="loading-dot"></div>
+
+    <!-- Loading screen -->
+    <div class="loading-screen" id="loading">
+        <div class="loading-emoji">💜</div>
+        <p class="loading-text">Bi saniye, sana özel bi şey geliyo...</p>
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
         </div>
     </div>
 
-    <div class="music-toggle" id="musicToggle" title="Müzik Aç/Kapat">
-        🎵
-    </div>
+    <!-- Stars -->
     <div class="stars" id="stars"></div>
-    
-    <div class="container">
-        <div class="stage active" id="stage1">
-            <div class="sunrise-container" id="sunriseContainer">
-                <div class="stars-night" id="starsNight"></div>
-                <div class="moon" id="moon"></div>
-                <div class="clouds" id="clouds"></div>
-                <div class="sky-gradient" id="skyGradient"></div>
-                <div class="birds" id="birds"></div>
-                <div class="grass-container" id="grassContainer"></div>
-                <div class="horizon"></div>
-                <div class="sun" id="sun"></div>
-            </div>
-            <div class="hint">Güneşi yukarı çek ve günü başlat</div>
-        </div>
 
-        <div class="stage" id="stage2">
-            <div class="heart-container">
-                <div class="heart-canvas" id="heartCanvas">
-                    <div class="heart-path">
-                        <svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
-                            <defs>
-                                <filter id="glow">
-                                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                                    <feMerge>
-                                        <feMergeNode in="coloredBlur"/>
-                                        <feMergeNode in="SourceGraphic"/>
-                                    </feMerge>
-                                </filter>
-                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#ff1a75;stop-opacity:1" />
-                                    <stop offset="50%" style="stop-color:#ff6b9d;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#ff1a75;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <path id="heartPath" stroke="url(#lineGradient)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="1" vector-effect="non-scaling-stroke" filter="url(#glow)"/>
-                            <path id="heartFill" fill="#ff1744" opacity="0" d="M150,270 C90,220 30,170 30,110 C30,60 70,30 110,30 C130,30 145,40 150,55 C155,40 170,30 190,30 C230,30 270,60 270,110 C270,170 210,220 150,270 Z" class="heart-fill-path" style="transform-origin: center; transform: scale(0.8);"/>
-                        </svg>
-                    </div>
-                    <div id="heartDots"></div>
-                </div>
-            </div>
-            <div class="hint" id="stage2Hint">Noktaları sırayla birleştir ve kalbi tamamla</div>
-            <div class="congratulations" id="heartCongrats">Tebrikler, kalbimi tamamladın! ❤️</div>
-        </div>
+    <!-- Floating orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
 
-        <div class="stage" id="stage3">
-            <div class="layers-container" id="layersContainer">
-                <div class="layer" data-layer="2" style="transform: translate(-50%, -50%);">
-                    <div class="layer-text">Sabahın en tatlı kısmı</div>
-                </div>
-                <div class="layer" data-layer="1" style="transform: translate(-50%, -50%);">
-                    <div class="layer-text">Seninle başlıyor</div>
-                </div>
-                <div class="layer" data-layer="0" style="transform: translate(-50%, -50%);">
-                    <div class="layer-text">Kalbim sende</div>
-                </div>
-            </div>
-            <div class="hint">Katmanları herhangi yöne kaydır</div>
-        </div>
+    <!-- Progress dots -->
+    <div class="progress-dots" id="progress">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
 
-        <div class="stage" id="stage4">
-            <div class="final-message">
-                <div class="reveal-text" id="revealText">
-                    <span class="heart">❤️</span>
-                    <span class="heart">❤️</span>
-                    <span class="heart">❤️</span>
-                    <span class="heart">❤️</span>
-                    <span class="heart">❤️</span>
-                    <span class="heart">❤️</span>
-                    <span class="heart">❤️</span>
-                    <span class="heart">❤️</span>
-                    <span id="nameText"></span>
-                </div>
-                <div class="subtitle">Bu site sadece senin için yapıldı</div>
+    <!-- Screen 0: Intro -->
+    <div class="screen active" id="screen-0">
+        <div class="text-container">
+            <p class="intro-text">
+                Hey, sana küçük bi sürprizim var 💜<br>
+                Sadece birkaç dakikanı al.
+            </p>
+            <p class="subtle-text">çok kısa sürecek, söz ✨</p>
+            <div class="button-container">
+                <button class="btn btn-primary" onclick="playClick(); goToScreen(1)">Başlayalım</button>
             </div>
         </div>
     </div>
+
+    <!-- Screen 1: Gülümseme -->
+    <div class="screen" id="screen-1">
+        <div class="text-container">
+            <p class="main-text">
+                Bazı insanlar mesaj yazarken<br>bile gülümsetir.
+            </p>
+            <div class="button-container">
+                <div class="button-row">
+                    <button class="btn btn-small" onclick="playClick(); saveAnswer(1, 'Doğru'); showReaction(event, '😊'); goToScreen(2)">Doğru</button>
+                    <button class="btn btn-small" onclick="playClick(); saveAnswer(1, 'Kesinliklee'); showReaction(event, '✨'); goToScreen(2)">Kesinliklee</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 2: Zaman -->
+    <div class="screen" id="screen-2">
+        <div class="text-container">
+            <p class="main-text">
+                Birini düşünürken zamanın<br><span class="highlight">yavaşladığını</span> fark ettin mi?
+            </p>
+            <div class="button-container">
+                <button class="btn" onclick="playClick(); saveAnswer(2, 'Bazen oluyo'); goToScreen(3)">Bazen oluyo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 3: Bildirim -->
+    <div class="screen" id="screen-3">
+        <div class="text-container">
+            <p class="main-text">
+                Telefonuna bildirim gelince<br>kimin mesajını umarsın?
+            </p>
+            <div class="quiz-options">
+                <button class="quiz-btn" onclick="playClick(); saveAnswer(3, 'Arkadaşlar'); goToScreen(4)">
+                    <span class="letter">A</span>
+                    <span>Arkadaşlar</span>
+                </button>
+                <button class="quiz-btn" onclick="playClick(); saveAnswer(3, 'Belli biri var 👀'); showReaction(event, '💫'); goToScreen(4)">
+                    <span class="letter">B</span>
+                    <span>Belli biri var 👀</span>
+                </button>
+                <button class="quiz-btn" onclick="playClick(); saveAnswer(3, 'Sessizde duruyo'); goToScreen(4)">
+                    <span class="letter">C</span>
+                    <span>Sessizde duruyo zaten</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 4: Gülümseme -->
+    <div class="screen" id="screen-4">
+        <div class="text-container">
+            <p class="main-text">
+                Son zamanlarda <span class="highlight">beklenmedik bi şey</span><br>seni gülümsetti mi?
+            </p>
+            <div class="button-container">
+                <div class="button-row">
+                    <button class="btn btn-small" onclick="playClick(); saveAnswer(4, 'Evett'); showReaction(event, '🥰'); goToScreen(5)">Evett</button>
+                    <button class="btn btn-small" onclick="playClick(); saveAnswer(4, 'Belki birazdan'); goToScreen(5)">Belki birazdan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 5: Gece -->
+    <div class="screen" id="screen-5">
+        <div class="text-container">
+            <p class="main-text">
+                Gece yatmadan önce<br>son düşündüğün şey ne oluyo?
+            </p>
+            <div class="quiz-options">
+                <button class="quiz-btn" onclick="playClick(); saveAnswer(5, 'Yarınki işler'); goToScreen(6)">
+                    <span class="letter">A</span>
+                    <span>Yarınki işler</span>
+                </button>
+                <button class="quiz-btn" onclick="playClick(); saveAnswer(5, 'Birisi 🌙'); showReaction(event, '🌙'); goToScreen(6)">
+                    <span class="letter">B</span>
+                    <span>Birisi 🌙</span>
+                </button>
+                <button class="quiz-btn" onclick="playClick(); saveAnswer(5, 'Rastgele şeyler'); goToScreen(6)">
+                    <span class="letter">C</span>
+                    <span>Rastgele şeyler</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 6: Yeni soru - Mutluluk -->
+    <div class="screen" id="screen-6">
+        <div class="text-container">
+            <p class="main-text">
+                Seni en çok ne <span class="highlight">mutlu eder</span>?
+            </p>
+            <div class="quiz-options">
+                <button class="quiz-btn" onclick="playClick(); saveAnswer(6, 'Beklenmedik mesajlar'); goToScreen(7)">
+                    <span class="letter">A</span>
+                    <span>Beklenmedik mesajlar</span>
+                </button>
+                <button class="quiz-btn" onclick="playClick(); saveAnswer(6, 'Küçük sürprizler'); showReaction(event, '🎁'); goToScreen(7)">
+                    <span class="letter">B</span>
+                    <span>Küçük sürprizler</span>
+                </button>
+                <button class="quiz-btn" onclick="playClick(); saveAnswer(6, 'Birinin beni düşünmesi'); goToScreen(7)">
+                    <span class="letter">C</span>
+                    <span>Birinin beni düşünmesi</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 7: Yeni soru - Hissetmek -->
+    <div class="screen" id="screen-7">
+        <div class="text-container">
+            <p class="main-text">
+                Birinin seni <span class="highlight">düşündüğünü</span><br>hissettiğin oldu mu?
+            </p>
+            <div class="button-container">
+                <div class="button-row">
+                    <button class="btn btn-small" onclick="playClick(); saveAnswer(7, 'Bazen oluyo'); goToScreen(8)">Bazen oluyo</button>
+                    <button class="btn btn-small" onclick="playClick(); saveAnswer(7, 'Şu an oldu gibi'); showReaction(event, '💜'); goToScreen(8)">Şu an oldu gibi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 8: Profil Kartı -->
+    <div class="screen" id="screen-8">
+        <div class="card">
+            <h3>✦ Bu profil</h3>
+            <ul>
+                <li>Detaylara dikkat ediyo</li>
+                <li>Küçük şeyleri önemsiyo</li>
+                <li>Sürpriz yapmayı seviyo</li>
+                <li>Bazen fazla düşünüyo</li>
+                <li>Ama hep iyi niyetli</li>
+            </ul>
+        </div>
+        <div class="button-container">
+            <button class="btn delayed-btn" id="profile-btn" onclick="playClick(); saveAnswer(8, 'Tanıdık geldi'); goToScreen(9)">Tanıdık geldi</button>
+        </div>
+    </div>
+
+    <!-- Screen 9: Şaka Soru - Kaçan Buton -->
+    <div class="screen" id="screen-9">
+        <div class="text-container">
+            <p class="main-text">
+                <span class="highlight">Ahmet'in başka kızlarla konuşmadığına</span><br>
+                inanıyo musun?
+            </p>
+            <div class="escape-btn-container" id="escape-container">
+                <button class="btn btn-small static-btn" onclick="playClick(); saveAnswer(9, 'İnanıyorum 😇'); showReaction(event, '😇'); goToScreen(10)">İnanıyorum</button>
+                <button class="btn btn-small escape-btn" id="escape-btn" onmouseenter="escapeButton(event)" ontouchstart="escapeButton(event)" onclick="tryClickEscape(event)">İnanmıyorumm 😝</button>
+            </div>
+            <p class="escape-message" id="escape-message"></p>
+        </div>
+    </div>
+
+    <!-- Screen 10: Tatlı iltifat -->
+    <div class="screen" id="screen-10">
+        <div class="text-container">
+            <p class="main-text">
+                <span class="highlight">çok tatlısınnn.</span>
+            </p>
+            <div class="button-container">
+                <div class="button-row">
+                    <button class="btn btn-small" onclick="playClick(); saveAnswer(10, 'Suss 😊'); showReaction(event, '😊'); goToScreen(11)">Suss</button>
+                    <button class="btn btn-small" onclick="playClick(); saveAnswer(10, 'Dur ya 🙈'); showReaction(event, '🙈'); goToScreen(11)">Dur ya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 11: Bahane -->
+    <div class="screen" id="screen-11">
+        <div class="text-container">
+            <p class="main-text" id="twist-text"></p>
+            <div class="button-container">
+                <button class="btn btn-primary delayed-btn" id="twist-btn" onclick="playClick(); goToScreen(12)">Devam et</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 12: İsim Reveal -->
+    <div class="screen" id="screen-12">
+        <div class="text-container">
+            <p class="pre-reveal-text">Aslında bu oyunun tek bi sebebi var.</p>
+            <p class="special-name">Ayşe</p>
+            <p class="post-reveal-text">Sensinn.</p>
+            <div class="button-container">
+                <button class="btn delayed-btn" id="reveal-btn" onclick="playClick(); goToScreen(13)">Devam et</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 13: Final -->
+    <div class="screen" id="screen-13">
+        <div class="final-container" id="final-container">
+            <p class="final-message" id="final-message">
+                Seni mutlu etmek hoşuma gidiyo.<br>
+                <span class="highlight">O yüzden bunu yaptımm.</span>
+            </p>
+            <div class="button-container" id="final-btn-container">
+                <button class="btn btn-primary" id="final-btn" onclick="playClick(); showFinalAnimation()">Gülümsedim</button>
+            </div>
+            <div class="final-reveal" id="final-reveal"></div>
+        </div>
+    </div>
+
+    <!-- Sparkle container -->
+    <div class="sparkle-container" id="sparkles"></div>
 
     <script>
-        let currentStage = 1;
-        let musicPlaying = false;
-        const bgMusicElement = document.getElementById('bgMusic');
-        bgMusicElement.volume = 0.4;
+        // JSONBin.io configuration for cloud storage
+        const JSONBIN_API_KEY = '$2a$10$pQbxRcElECJCk2lPcO5IVOUXcoLFs7pJNrffs/s3ZMDLxtDN5ImFG';
+        const JSONBIN_BIN_ID = '6959def043b1c97be917ae2f';
         
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let audioUnlocked = false;
+        let currentScreen = 0;
+        const totalScreens = 14;
 
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loadingScreen').classList.add('hidden');
-                setTimeout(() => {
-                    document.getElementById('loadingScreen').remove();
-                }, 500);
-            }, 2500);
-        });
+        // Answer tracking
+        const answers = {};
+        const questions = {
+            1: "Bazı insanlar mesaj yazarken bile gülümsetir",
+            2: "Birini düşünürken zamanın yavaşladığını fark ettin mi",
+            3: "Telefonuna bildirim gelince kimin mesajını umarsın",
+            4: "Beklenmedik bi şey seni gülümsetti mi",
+            5: "Gece yatmadan önce son düşündüğün şey",
+            6: "Seni en çok ne mutlu eder",
+            7: "Birinin seni düşündüğünü hissettiğin oldu mu",
+            8: "Bu profil - tanıdık geldi mi",
+            9: "Ahmet'in başka kızlarla konuşmadığına inanıyo musun",
+            10: "Çok tatlısın"
+        };
 
-        document.getElementById('musicToggle').addEventListener('click', toggleMusic);
-        
-        document.body.addEventListener('click', () => {
-            unlockAudio();
-            if (!musicPlaying) {
-                bgMusicElement.play().then(() => {
-                    musicPlaying = true;
-                    document.getElementById('musicToggle').textContent = '🔊';
-                }).catch(e => {});
-            }
-        }, { once: true });
-
-        function toggleMusic() {
-            if (musicPlaying) {
-                bgMusicElement.pause();
-                document.getElementById('musicToggle').textContent = '🔇';
-                musicPlaying = false;
-            } else {
-                bgMusicElement.play().then(() => {
-                    document.getElementById('musicToggle').textContent = '🔊';
-                    musicPlaying = true;
-                }).catch(e => console.log('Audio play failed:', e));
-            }
-        }
-        
-        function unlockAudio() {
-            if (audioUnlocked) return;
-            try {
-                const oscillator = audioContext.createOscillator();
-                oscillator.connect(audioContext.destination);
-                oscillator.start(0);
-                oscillator.stop(0);
-                audioUnlocked = true;
-            } catch(e) {}
-        }
-        
-        function playTone(frequency, duration, type = 'sine') {
-            if (!audioUnlocked) return;
-            try {
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                oscillator.type = type;
-                oscillator.frequency.value = frequency;
-                gainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + duration);
-            } catch(e) {}
-        }
-        
-        function playMelody(notes) {
-            if (!audioUnlocked) return;
-            notes.forEach((note) => {
-                setTimeout(() => {
-                    playTone(note.freq, note.duration, note.type || 'sine');
-                }, note.delay);
-            });
-        }
-        
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        const heartDotMessages = [
-            'Kalbin ilk atışı... 💓',
-            'Her vuruşta sen varsın 💕',
-            'Sevgi çizgisi güçleniyor 💖',
-            'Yavaşça tamamlanıyor 💗',
-            'Kalp şekilleniyor 💝',
-            'Seninle her an 💞',
-            'Sensiz olmaz 💓',
-            'Çok yaklaştın 💕',
-            'Devam et 💖',
-            'Son birkaç adım 💗',
-            'Heyecan artıyor 💝',
-            'Son nokta, seni seviyorum! 💞'
-        ];
-        const starCount = isMobile ? 15 : 50;
-        const particleCount = isMobile ? 5 : 20;
-        const nightStarCount = isMobile ? 10 : 30;
-
-        for (let i = 0; i < starCount; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 3 + 's';
-            star.style.backgroundColor = '#fff';
-            document.getElementById('stars').appendChild(star);
-        }
-
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 4 + 's';
-            particle.style.animationDuration = (3 + Math.random() * 3) + 's';
-            particle.style.backgroundColor = '#fff';
-            document.getElementById('stars').appendChild(particle);
-        }
-
-        const starsNight = document.getElementById('starsNight');
-        for (let i = 0; i < nightStarCount; i++) {
-            const star = document.createElement('div');
-            star.className = 'star-small';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 70 + '%';
-            star.style.animationDelay = Math.random() * 2 + 's';
-            star.style.backgroundColor = '#fff';
-            starsNight.appendChild(star);
-        }
-
-        const clouds = document.getElementById('clouds');
-        const cloudConfigs = [
-            { width: 80, height: 30, top: 20, delay: 0 },
-            { width: 100, height: 35, top: 50, delay: 5 },
-            { width: 70, height: 25, top: 35, delay: 10 }
-        ];
-        
-        cloudConfigs.forEach(config => {
-            const cloud = document.createElement('div');
-            cloud.className = 'cloud';
-            cloud.style.width = config.width + 'px';
-            cloud.style.height = config.height + 'px';
-            cloud.style.top = config.top + '%';
-            cloud.style.left = '-100px';
-            cloud.style.animationDelay = config.delay + 's';
-            clouds.appendChild(cloud);
-        });
-
-        const heartDotPositions = [
-            { x: 50, y: 20 },
-            { x: 70, y: 10 },
-            { x: 85, y: 15 },
-            { x: 90, y: 30 },
-            { x: 85, y: 50 },
-            { x: 70, y: 70 },
-            { x: 50, y: 90 },
-            { x: 30, y: 70 },
-            { x: 15, y: 50 },
-            { x: 10, y: 30 },
-            { x: 15, y: 15 },
-            { x: 30, y: 10 }
-        ];
-
-        const heartDots = document.getElementById('heartDots');
-        const heartPath = document.getElementById('heartPath');
-        const heartFill = document.getElementById('heartFill');
-        let heartPattern = [];
-        let drawing = false;
-
-        heartDotPositions.forEach((pos, index) => {
-            const dot = document.createElement('div');
-            dot.className = 'heart-dot';
-            const dotSize = isMobile ? 9 : 11;
-            dot.style.left = `calc(${pos.x}% - ${dotSize}px)`;
-            dot.style.top = `calc(${pos.y}% - ${dotSize}px)`;
-            dot.dataset.index = index;
-            heartDots.appendChild(dot);
-
-            if (isMobile) {
-                dot.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleDotTap(index);
-                }, { passive: false });
-            } else {
-                dot.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    startHeartPattern(e, index);
-                }, { passive: false });
-                dot.addEventListener('mousedown', (e) => startHeartPattern(e, index));
-            }
-        });
-
-        if (!isMobile) {
-            document.addEventListener('touchmove', continueHeartPattern);
-            document.addEventListener('mousemove', continueHeartPattern);
-            document.addEventListener('touchend', endHeartPattern);
-            document.addEventListener('mouseup', endHeartPattern);
-        }
-
-        function updateHintMessage(dotIndex) {
-            const hint = document.querySelector('#stage2 .hint');
-            if (hint && heartDotMessages[dotIndex]) {
-                hint.textContent = heartDotMessages[dotIndex];
-                hint.classList.remove('pulse');
-                void hint.offsetWidth;
-                hint.classList.add('pulse');
-            }
-        }
-
-        function handleDotTap(index) {
-            if (currentStage !== 2) return;
+        function saveAnswer(questionNum, answer) {
+            answers[questionNum] = answer;
+            localStorage.setItem('ayse_oyun_cevaplar', JSON.stringify(answers));
             
-            if (heartPattern.length === 0) {
-                heartPattern = [index];
-                drawing = true;
-                updateHeartPath();
-                updateNextAvailableDots();
-                updateHintMessage(0);
-                playTone(520, 0.06);
-            } else {
-                const lastIndex = heartPattern[heartPattern.length - 1];
-                const distance = Math.abs(index - lastIndex);
-                
-                if (!heartPattern.includes(index) && (distance === 1 || distance === 11)) {
-                    heartPattern.push(index);
-                    updateHeartPath();
-                    updateNextAvailableDots();
-                    updateHintMessage(heartPattern.length - 1);
-                    playTone(440 + (index * 40), 0.15);
-                    
-                    if (heartPattern.length === 12) {
-                        drawing = false;
-                        completeHeart();
-                    }
-                }
-            }
+            // Save to cloud (JSONBin.io)
+            saveToCloud();
         }
 
-        function updateNextAvailableDots() {
-            if (heartPattern.length === 0 || heartPattern.length === heartDotPositions.length) {
-                document.querySelectorAll('.heart-dot').forEach(dot => {
-                    dot.classList.remove('next-available');
+        async function saveToCloud() {
+            try {
+                const data = {
+                    answers: answers,
+                    timestamp: new Date().toLocaleString('tr-TR'),
+                    completed: Object.keys(answers).length >= 8
+                };
+                
+                await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify(data)
                 });
-                return;
+            } catch (e) {
+                console.log('Cloud save skipped');
             }
-            
-            const lastIndex = heartPattern[heartPattern.length - 1];
-            document.querySelectorAll('.heart-dot').forEach((dot, i) => {
-                const distance = Math.abs(i - lastIndex);
-                const isAvailable = !heartPattern.includes(i) && (distance === 1 || distance === 11);
-                dot.classList.toggle('next-available', isAvailable);
-            });
         }
 
-        function startHeartPattern(e, index) {
-            if (currentStage !== 2) return;
-            e.preventDefault();
-            heartPattern = [index];
-            drawing = true;
-            updateHeartPath();
-            updateNextAvailableDots();
-            updateHintMessage(0);
-            playTone(520, 0.06);
-        }
-
-        function continueHeartPattern(e) {
-            if (!drawing || currentStage !== 2) return;
-            e.preventDefault();
-            
-            const touch = e.touches ? e.touches[0] : e;
-            const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-            const dot = elements.find(el => el.classList.contains('heart-dot'));
-            
-            if (dot) {
-                const index = parseInt(dot.dataset.index);
-                const lastIndex = heartPattern[heartPattern.length - 1];
-                
-                if (!heartPattern.includes(index)) {
-                    const distance = Math.abs(index - lastIndex);
-                    if (distance === 1 || distance === 11) {
-                        heartPattern.push(index);
-                        updateHeartPath();
-                        updateNextAvailableDots();
-                        updateHintMessage(heartPattern.length - 1);
-                        playTone(440 + (index * 40), 0.15);
+        async function loadFromCloud() {
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY
                     }
-                }
+                });
+                const data = await response.json();
+                return data.record;
+            } catch (e) {
+                return null;
             }
         }
 
-        function completeHeart() {
-            const heartCanvas = document.getElementById('heartCanvas');
-            const centerX = heartCanvas.offsetWidth / 2;
-            const centerY = heartCanvas.offsetHeight / 2;
-            const pathElement = document.getElementById('heartPath');
-            const fillElement = document.getElementById('heartFill');
-            
-            // Mark all dots as completed
-            document.querySelectorAll('.heart-dot').forEach(dot => {
-                dot.classList.remove('active', 'next-available');
-                dot.classList.add('completed');
+        function getAnswers() {
+            return JSON.parse(localStorage.getItem('ayse_oyun_cevaplar') || '{}');
+        }
+
+        // Create stars
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = (1 + Math.random() * 3) + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                container.appendChild(star);
+            }
+        }
+
+        function updateProgress(screenNum) {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index < screenNum) {
+                    dot.classList.add('completed');
+                } else if (index === screenNum) {
+                    dot.classList.add('active');
+                }
             });
+        }
+
+        function goToScreen(screenNumber) {
+            const current = document.querySelector('.screen.active');
+            const next = document.getElementById(`screen-${screenNumber}`);
+
+            current.classList.add('fade-out');
             
-            // Step 1: Particle explosion
             setTimeout(() => {
-                createParticleExplosion(centerX, centerY);
-            }, 300);
-            
-            // Step 2: Hide dots one by one
-            setTimeout(() => {
-                document.querySelectorAll('.heart-dot').forEach((dot, index) => {
+                current.classList.remove('active', 'fade-out');
+                next.classList.add('active');
+                currentScreen = screenNumber;
+                updateProgress(screenNumber);
+
+                // Special handlers
+                if (screenNumber === 8) {
                     setTimeout(() => {
-                        dot.style.transition = 'all 0.4s ease';
-                        dot.style.opacity = '0';
-                        dot.style.transform = 'scale(0)';
-                    }, index * 40);
-                });
-            }, 400);
-            
-            // Step 3: Hide the line path and show the filled heart
-            setTimeout(() => {
-                // Hide the connecting lines
-                pathElement.style.transition = 'opacity 0.5s ease';
-                pathElement.style.opacity = '0';
-                
-                // Show the filled heart with animation
-                fillElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                fillElement.style.opacity = '1';
-                fillElement.style.transform = 'scale(1)';
-                fillElement.classList.add('beating');
-                
-                playMelody([
-                    { freq: 660, duration: 0.3, delay: 0, type: 'sine' },
-                    { freq: 880, duration: 0.25, delay: 150, type: 'sine' },
-                    { freq: 1047, duration: 0.3, delay: 300, type: 'sine' },
-                    { freq: 1319, duration: 0.4, delay: 500, type: 'sine' }
-                ]);
-            }, 1000);
-            
-            // Step 4: Show congratulations message
-            setTimeout(() => {
-                document.querySelector('#stage2Hint').style.display = 'none';
-                document.getElementById('heartCongrats').classList.add('show');
-            }, 1500);
-            
-            // Step 5: Move to next stage
-            setTimeout(() => moveToStage(3), 3500);
-        }
-
-        function endHeartPattern() {
-            if (!drawing) return;
-            drawing = false;
-            
-            const allConnected = isHeartComplete();
-            
-            if (allConnected && heartPattern.length === heartDotPositions.length) {
-                completeHeart();
-            } else {
-                setTimeout(() => {
-                    heartPattern = [];
-                    updateHeartDots();
-                    heartPath.setAttribute('d', '');
-                }, 500);
-            }
-        }
-
-        function isHeartComplete() {
-            if (heartPattern.length !== heartDotPositions.length) return false;
-            
-            const connected = new Set();
-            for (let i = 0; i < heartPattern.length - 1; i++) {
-                const current = heartPattern[i];
-                const next = heartPattern[i + 1];
-                const distance = Math.abs(next - current);
-                if (distance === 1 || distance === 11) {
-                    connected.add(current);
-                    connected.add(next);
+                        document.getElementById('profile-btn').classList.add('show');
+                    }, 1500);
                 }
-            }
-            
-            return connected.size === heartDotPositions.length;
+
+                if (screenNumber === 11) {
+                    typeText();
+                }
+
+                if (screenNumber === 12) {
+                    setTimeout(() => {
+                        document.getElementById('reveal-btn').classList.add('show');
+                        createRevealSparkles();
+                    }, 2000);
+                }
+            }, 500);
         }
 
-        function updateHeartDots() {
-            document.querySelectorAll('.heart-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', heartPattern.includes(i));
-            });
-        }
-
-        function updateHeartPath() {
-            if (heartPattern.length < 1) {
-                heartPath.setAttribute('d', '');
-                return;
-            }
+        function typeText() {
+            const text = "Bu bi oyun gibi başladı.\nAslında küçük bi bahane.";
+            const element = document.getElementById('twist-text');
+            element.innerHTML = '<span class="typing-text"></span><span class="typing-cursor"></span>';
+            const typingSpan = element.querySelector('.typing-text');
             
-            let pathCommands = [];
-            heartPattern.forEach((index, i) => {
-                const pos = heartDotPositions[index];
-                const x = pos.x * 3;
-                const y = pos.y * 3;
-                if (i === 0) {
-                    pathCommands.push(`M ${x} ${y}`);
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    if (text.charAt(i) === '\n') {
+                        typingSpan.innerHTML += '<br>';
+                    } else {
+                        typingSpan.innerHTML += text.charAt(i);
+                    }
+                    i++;
+                    setTimeout(type, 50);
                 } else {
-                    pathCommands.push(`L ${x} ${y}`);
-                }
-            });
-            
-            if (heartPattern.length === heartDotPositions.length) {
-                pathCommands.push('Z');
-            }
-            
-            heartPath.setAttribute('d', pathCommands.join(' '));
-        }
-
-        const sun = document.getElementById('sun');
-        const skyGradient = document.getElementById('skyGradient');
-        const sunriseContainer = document.getElementById('sunriseContainer');
-        const moon = document.getElementById('moon');
-        const starsNightEl = document.getElementById('starsNight');
-        const cloudsEl = document.getElementById('clouds');
-        let sunDragging = false;
-        let sunStartY = 0;
-        let sunCurrentY = 0;
-        let sunProgress = 0;
-
-        sun.addEventListener('touchstart', (e) => { unlockAudio(); startSunDrag(e); });
-        sun.addEventListener('mousedown', (e) => { unlockAudio(); startSunDrag(e); });
-        document.addEventListener('touchmove', dragSun);
-        document.addEventListener('mousemove', dragSun);
-        document.addEventListener('touchend', endSunDrag);
-        document.addEventListener('mouseup', endSunDrag);
-
-        function startSunDrag(e) {
-            if (currentStage !== 1) return;
-            e.preventDefault();
-            sunDragging = true;
-            sunStartY = e.touches ? e.touches[0].clientY : e.clientY;
-            sunCurrentY = sunStartY;
-            sun.classList.add('rising');
-            playTone(300, 0.1);
-        }
-
-        function dragSun(e) {
-            if (!sunDragging || currentStage !== 1) return;
-            e.preventDefault();
-            sunCurrentY = e.touches ? e.touches[0].clientY : e.clientY;
-            const diff = sunStartY - sunCurrentY;
-            
-            if (diff > 0) {
-                const prevProgress = sunProgress;
-                sunProgress = Math.min(diff / 200, 1);
-                const maxDiff = Math.min(diff, 230);
-                sun.style.bottom = (20 + maxDiff) + 'px';
-                sun.style.transform = `translateX(-50%) scale(${1 + sunProgress * 0.3})`;
-                skyGradient.style.opacity = sunProgress;
-                
-                if (sunProgress > 0.3) {
-                    sunriseContainer.classList.add('daylight');
-                    moon.classList.add('hidden');
-                    starsNightEl.classList.add('hidden');
-                    cloudsEl.classList.add('visible');
-                    if (sunProgress > 0.7) {
-                        document.getElementById('birds').classList.add('visible');
-                        document.getElementById('grassContainer').classList.add('visible');
-                    }
-                }
-                
-                if (Math.floor(sunProgress * 10) > Math.floor(prevProgress * 10)) {
-                    playTone(400 + sunProgress * 400, 0.05);
+                    element.querySelector('.typing-cursor').style.display = 'none';
+                    setTimeout(() => {
+                        document.getElementById('twist-btn').classList.add('show');
+                    }, 600);
                 }
             }
+            setTimeout(type, 500);
         }
 
-        function endSunDrag() {
-            if (!sunDragging) return;
-            sunDragging = false;
-            sun.classList.remove('rising');
+        function createRevealSparkles() {
+            const container = document.getElementById('sparkles');
+            container.innerHTML = '';
             
-            if (sunProgress >= 0.9) {
-                sun.style.bottom = '250px';
-                sun.style.transform = 'translateX(-50%) scale(1.3)';
-                sun.style.transition = 'all 0.3s ease';
-                skyGradient.style.opacity = '1';
-                sunriseContainer.classList.add('daylight');
-                moon.classList.add('hidden');
-                starsNightEl.classList.add('hidden');
-                cloudsEl.classList.add('visible');
-                document.getElementById('birds').classList.add('visible');
-                document.getElementById('grassContainer').classList.add('visible');
-                
-                createBirds();
-                createGrass();
-                
+            for (let i = 0; i < 30; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                sparkle.style.animationDuration = (3 + Math.random() * 2) + 's';
+                container.appendChild(sparkle);
+            }
+            container.classList.add('show');
+
+            setTimeout(() => {
+                container.classList.remove('show');
+            }, 5000);
+        }
+
+        function showReaction(event, emoji) {
+            const reaction = document.createElement('div');
+            reaction.className = 'reaction';
+            reaction.textContent = emoji;
+            reaction.style.left = event.clientX + 'px';
+            reaction.style.top = event.clientY + 'px';
+            document.body.appendChild(reaction);
+            
+            setTimeout(() => reaction.remove(), 2500);
+        }
+
+        function showFinalAnimation() {
+            const btnContainer = document.getElementById('final-btn-container');
+            const message = document.getElementById('final-message');
+            btnContainer.style.opacity = '0';
+            btnContainer.style.transform = 'scale(0.8)';
+            message.style.opacity = '0';
+            message.style.transform = 'translateY(-20px)';
+
+            document.getElementById('progress').style.opacity = '0';
+
+            createConfetti();
+
+            const sparkleContainer = document.getElementById('sparkles');
+            sparkleContainer.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                sparkle.style.animationDuration = (2 + Math.random() * 3) + 's';
+                sparkleContainer.appendChild(sparkle);
+            }
+            sparkleContainer.classList.add('show');
+
+            setTimeout(() => {
+                const reveal = document.getElementById('final-reveal');
+                reveal.innerHTML = `
+                    <div class="big-heart">💖</div>
+                    <p class="love-text">Seninle her an güzell...</p>
+                    <p style="margin-top: 1.5rem; font-size: 1.1rem; color: rgba(255,255,255,0.8);">Bu oyunu bitirdin, ama hikaye daha yeni başlıyoo ✨</p>
+                `;
+                reveal.classList.add('show');
+            }, 1000);
+
+            setTimeout(createConfetti, 1200);
+            setTimeout(createConfetti, 2400);
+
+            // Final cloud save
+            saveToCloud();
+        }
+
+        function createConfetti() {
+            const colors = ['#f093fb', '#f5576c', '#667eea', '#764ba2', '#4facfe', '#00f2fe', '#ffecd2', '#fcb69f'];
+            for (let i = 0; i < 60; i++) {
                 setTimeout(() => {
-                    sun.style.transition = '';
-                    moveToStage(2);
-                }, 2500);
-            } else {
-                sun.style.bottom = '20px';
-                sun.style.transform = 'translateX(-50%) scale(1)';
-                sun.style.transition = '';
-                skyGradient.style.opacity = '0';
-                sunriseContainer.classList.remove('daylight');
-                moon.classList.remove('hidden');
-                starsNightEl.classList.remove('hidden');
-                cloudsEl.classList.remove('visible');
-                document.getElementById('birds').classList.remove('visible');
-                document.getElementById('grassContainer').classList.remove('visible');
-                sunProgress = 0;
-                playTone(200, 0.1);
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = (8 + Math.random() * 12) + 'px';
+                    confetti.style.height = (8 + Math.random() * 12) + 'px';
+                    confetti.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 25);
             }
         }
 
-
-        const layersContainer = document.getElementById('layersContainer');
-        const layers = Array.from(document.querySelectorAll('.layer'));
-        let layersRemoved = 0;
-        let draggedLayer = null;
-        let startX = 0;
-        let startY = 0;
-        let currentX = 0;
-        let currentY = 0;
-
-        layers.forEach(layer => {
-            layer.addEventListener('touchstart', startDrag);
-            layer.addEventListener('mousedown', startDrag);
-        });
-
-        document.addEventListener('touchmove', drag);
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('touchend', endDrag);
-        document.addEventListener('mouseup', endDrag);
-
-        function startDrag(e) {
-            if (currentStage !== 3) return;
-            draggedLayer = e.currentTarget;
-            const touch = e.touches ? e.touches[0] : e;
-            startX = touch.clientX;
-            startY = touch.clientY;
-            currentX = startX;
-            currentY = startY;
-            playTone(350, 0.08);
+        // Sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playClick() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
         }
 
-        function drag(e) {
-            if (!draggedLayer || currentStage !== 3) return;
-            e.preventDefault();
-            const touch = e.touches ? e.touches[0] : e;
-            currentX = touch.clientX;
-            currentY = touch.clientY;
-            const diffX = currentX - startX;
-            const diffY = currentY - startY;
+        function playEscape() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
             
-            draggedLayer.style.transform = `translate(${diffX}px, ${diffY}px)`;
-            const distance = Math.sqrt(diffX * diffX + diffY * diffY);
-            draggedLayer.style.opacity = Math.max(0, 1 - distance / 200);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 400;
+            oscillator.type = 'sawtooth';
+            
+            gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
         }
 
-        function endDrag() {
-            if (!draggedLayer) return;
-            
-            const diffX = currentX - startX;
-            const diffY = currentY - startY;
-            const distance = Math.sqrt(diffX * diffX + diffY * diffY);
-            
-            if (distance > 120) {
-                const angle = Math.atan2(diffY, diffX);
-                const finalX = Math.cos(angle) * 500;
-                const finalY = Math.sin(angle) * 500;
-                draggedLayer.style.transform = `translate(${finalX}px, ${finalY}px)`;
-                draggedLayer.style.opacity = '0';
-                playTone(500 + layersRemoved * 200, 0.2, 'sine');
-                layersRemoved++;
-                
+        function playSuccess() {
+            [523.25, 659.25, 783.99].forEach((freq, i) => {
                 setTimeout(() => {
-                    if (layersRemoved === 3) {
-                        playTone(880, 0.8, 'triangle');
-                        setTimeout(() => playTone(660, 0.3), 200);
-                        setTimeout(() => playTone(880, 0.5), 400);
-                        moveToStage(4);
-                    }
-                }, 300);
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    oscillator.frequency.value = freq;
+                    oscillator.type = 'sine';
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                }, i * 100);
+            });
+        }
+
+        // Escape button
+        let escapeCount = 0;
+        let canClickEscape = false;
+        const escapeMessages = [
+            "Hoop! Kaçtı 😏",
+            "Ahmet iyi biri bana güven 😇",
+            "Ahmet gerçekden sadece seninle konuşmak istiyo 💜",
+            "Yakalayamazsın haha 🏃",
+            "Bi daha dene 😄",
+            "Neredeyse yakalıyodun!",
+            "Çok yavaşsın 😜",
+            "Hâlâ deniyosun ya 😂",
+            "Vazgeç artık 🙈",
+            "İnatçı çıktın sen",
+            "Tamam tamam yakaladın..."
+        ];
+
+        function escapeButton(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            playEscape();
+            
+            const btn = document.getElementById('escape-btn');
+            btn.style.position = 'fixed';
+            
+            const padding = 80;
+            const maxX = window.innerWidth - btn.offsetWidth - padding;
+            const maxY = window.innerHeight - btn.offsetHeight - padding;
+            
+            let newX = padding + Math.random() * (maxX - padding);
+            let newY = padding + Math.random() * (maxY - padding);
+            
+            btn.style.left = newX + 'px';
+            btn.style.top = newY + 'px';
+            btn.style.right = 'auto';
+            
+            const messageEl = document.getElementById('escape-message');
+            const messageIndex = Math.min(escapeCount, escapeMessages.length - 1);
+            messageEl.textContent = escapeMessages[messageIndex];
+            messageEl.classList.remove('show');
+            
+            void messageEl.offsetWidth;
+            messageEl.classList.add('show');
+            
+            escapeCount++;
+            
+            if (escapeCount >= 8) {
+                canClickEscape = true;
+                btn.style.transition = 'all 0.5s ease';
+            }
+        }
+
+        function tryClickEscape(event) {
+            event.preventDefault();
+            if (canClickEscape) {
+                playSuccess();
+                saveAnswer(9, 'İnanıyorum 😝 (yakaladı!)');
+                showReaction(event, '🎉');
+                goToScreen(10);
             } else {
-                const layerIndex = parseInt(draggedLayer.dataset.layer);
-                draggedLayer.style.transform = `translate(${layerIndex * 5}px, ${layerIndex * 10}px)`;
-                draggedLayer.style.opacity = '1';
-                playTone(250, 0.08);
-            }
-            
-            draggedLayer = null;
-        }
-
-        function moveToStage(stage) {
-            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
-            document.getElementById(`stage${stage}`).classList.add('active');
-            currentStage = stage;
-            
-            if (stage === 2) {
-                playMelody([
-                    { freq: 523, duration: 0.15, delay: 0 },
-                    { freq: 659, duration: 0.15, delay: 150 },
-                    { freq: 784, duration: 0.2, delay: 300 }
-                ]);
-            } else if (stage === 3) {
-                playMelody([
-                    { freq: 698, duration: 0.15, delay: 0 },
-                    { freq: 880, duration: 0.15, delay: 150 },
-                    { freq: 1047, duration: 0.2, delay: 300 }
-                ]);
-            } else if (stage === 4) {
-                playMelody([
-                    { freq: 784, duration: 0.2, delay: 0 },
-                    { freq: 988, duration: 0.2, delay: 200 },
-                    { freq: 1175, duration: 0.2, delay: 400 },
-                    { freq: 1397, duration: 0.3, delay: 600 }
-                ]);
-                animateName();
+                escapeButton(event);
             }
         }
 
-        function createBirds() {
-            const birdsContainer = document.getElementById('birds');
-            birdsContainer.innerHTML = '';
-            
-            const birdTypes = ['🐦', '🕊️', '🐦'];
-            const positions = [
-                { top: 25, delay: 0, duration: 7 },
-                { top: 55, delay: 500, duration: 9 },
-                { top: 40, delay: 1000, duration: 8 },
-                { top: 70, delay: 1500, duration: 10 },
-                { top: 35, delay: 2000, duration: 6 }
-            ];
-            
-            positions.forEach((pos, i) => {
-                const bird = document.createElement('div');
-                bird.className = 'bird flying';
-                bird.textContent = birdTypes[i % birdTypes.length];
-                bird.style.top = pos.top + 'px';
-                bird.style.setProperty('--fly-duration', pos.duration + 's');
-                bird.style.fontSize = (16 + Math.random() * 4) + 'px';
-                bird.style.animationDelay = pos.delay + 'ms';
-                
-                birdsContainer.appendChild(bird);
-            });
-        }
-
-        function createGrass() {
-            const grassContainer = document.getElementById('grassContainer');
-            grassContainer.innerHTML = '';
-            
-            for (let i = 0; i < 25; i++) {
-                const grass = document.createElement('div');
-                grass.className = 'grass-blade';
-                const height = 15 + Math.random() * 20;
-                grass.style.height = height + 'px';
-                grass.style.animationDelay = (Math.random() * 2) + 's';
-                grassContainer.appendChild(grass);
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
             }
-        }
+            lastTouchEnd = now;
+        }, false);
 
-        function animateName() {
-            const nameText = document.getElementById('nameText');
-            nameText.innerHTML = '';
+        // Cloud answers view - ?cevaplar
+        if (window.location.search.includes('cevaplar')) {
+            document.body.innerHTML = '<div style="padding: 2rem; font-family: Inter, sans-serif; background: linear-gradient(135deg, #1a1a2e, #16213e); min-height: 100vh; color: #fff;"><h1 style="margin-bottom: 2rem; background: linear-gradient(135deg, #f093fb, #f5576c); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🎮 Ayşe\'nin Cevapları</h1><div id="answers-container"><p style="color: rgba(255,255,255,0.6);">Yükleniyor...</p></div></div>';
             
-            const line1 = document.createElement('div');
-            const line2 = document.createElement('div');
-            
-            'Günaydınnnn'.split('').forEach((char, index) => {
-                const span = document.createElement('span');
-                span.className = 'letter';
-                span.textContent = char;
-                span.style.animationDelay = (index * 0.08) + 's';
-                line1.appendChild(span);
+            loadFromCloud().then(data => {
+                const container = document.getElementById('answers-container');
+                if (data && data.answers && Object.keys(data.answers).length > 0) {
+                    let html = `<p style="color: rgba(255,255,255,0.6); margin-bottom: 1.5rem;">📅 Son güncelleme: ${data.timestamp || 'Bilinmiyor'}</p>`;
+                    html += `<p style="color: ${data.completed ? '#4ade80' : '#fbbf24'}; margin-bottom: 2rem;">${data.completed ? '✅ Oyun tamamlandı!' : '⏳ Oyun devam ediyor...'}</p>`;
+                    
+                    for (let q in questions) {
+                        const answer = data.answers[q];
+                        html += `
+                            <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 1.2rem; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.1);">
+                                <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 0.5rem;">❓ ${questions[q]}</p>
+                                <p style="color: #fff; font-size: 1.1rem; font-weight: 500;">${answer ? '✅ ' + answer : '⏸️ Henüz cevap yok'}</p>
+                            </div>
+                        `;
+                    }
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<p style="color: rgba(255,255,255,0.6);">Henüz cevap yok. Oyun oynanmamış veya tamamlanmamış.</p>';
+                }
             });
+        } else {
+            // Normal game - initialize
+            createStars();
+            updateProgress(0);
             
-            'Ayşe'.split('').forEach((char, index) => {
-                const span = document.createElement('span');
-                span.className = 'letter';
-                span.textContent = char;
-                span.style.animationDelay = ((11 + index) * 0.08) + 's';
-                line2.appendChild(span);
-            });
+            // Background music - start on first interaction
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.15; // Low volume
             
-            nameText.appendChild(line1);
-            nameText.appendChild(line2);
+            function startMusic() {
+                bgMusic.play().catch(() => {});
+                document.removeEventListener('click', startMusic);
+                document.removeEventListener('touchstart', startMusic);
+            }
+            
+            document.addEventListener('click', startMusic);
+            document.addEventListener('touchstart', startMusic);
+            
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+            }, 1500);
         }
     </script>
 </body>
 </html>
-
